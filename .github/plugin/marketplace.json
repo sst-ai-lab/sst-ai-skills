@@ -1,0 +1,10 @@
+{
+  "name": "company-ai-skills",
+  "owner": {
+    "name": "Your Company"
+  },
+  "metadata": {
+    "description": "Internal AI skills for GitHub Copilot"
+  },
+  "plugins": []
+}
