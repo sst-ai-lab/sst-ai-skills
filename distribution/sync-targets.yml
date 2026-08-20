@@ -2,3 +2,7 @@ projects:
   sst-ai-lab/cm-be-bff-web:
     skills:
       - backend-skill
+  sst-ai-lab/cm-fe-web:
+    skills:
+      - backend-skill
+      - frontend-skill
