@@ -202,12 +202,13 @@ while IFS='|' read -r repo skills_csv; do
   git -C "$work_dir" commit \
     -m "chore: sync AI skills"
 
-  #
-  # The branch is generated automatically, so force push is intentional.
-  #
-  # --force-with-lease is preferred over --force because it avoids
-  # overwriting unexpected remote changes.
-  #
+  # The sync branch may already exist from a previous workflow run.
+  # Fetch its latest state before using --force-with-lease.
+  git -C "$work_dir" fetch \
+    origin \
+    "$SYNC_BRANCH:refs/remotes/origin/$SYNC_BRANCH" \
+    || true
+
   git -C "$work_dir" push \
     --force-with-lease \
     origin \
