@@ -6,5 +6,12 @@
   "metadata": {
     "description": "Internal AI skills for GitHub Copilot"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "java-review",
+      "description": "Java code review skills",
+      "version": "1.0.0",
+      "source": "./plugins/java-review"
+    }
+  ]
 }
