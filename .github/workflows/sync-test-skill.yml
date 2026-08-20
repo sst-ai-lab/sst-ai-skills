@@ -1,6 +1,13 @@
 name: Sync test-skill to project-a
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "plugins/test-skill/**"
+
+  # Giữ lại để khi cần vẫn có thể chạy bằng tay
   workflow_dispatch:
 
 jobs:
@@ -9,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout skill repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Clone project-a
         env:
@@ -17,42 +24,66 @@ jobs:
         run: |
           git clone https://x-access-token:${GH_TOKEN}@github.com/Thien3920/project-a.git project-a
 
-      - name: Copy skill
+      - name: Copy test-skill
         run: |
+          rm -rf project-a/.github/skills/test-skill
           mkdir -p project-a/.github/skills/test-skill
-          cp -R plugins/test-skill/skills/test-skill/* project-a/.github/skills/test-skill/
 
-      - name: Create branch and commit
+          cp -R \
+            plugins/test-skill/skills/test-skill/. \
+            project-a/.github/skills/test-skill/
+
+      - name: Check for changes
+        id: changes
         working-directory: project-a
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          BRANCH="chore/update-test-skill"
-
-          git checkout -b "$BRANCH"
-          git add .github/skills/test-skill
-
-          if git diff --cached --quiet; then
+          if git diff --quiet -- .github/skills/test-skill; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "No skill changes."
-            exit 0
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Skill changes detected."
           fi
 
-          git commit -m "chore: update test-skill"
-          git push --force origin "$BRANCH"
-
-      - name: Create pull request
+      - name: Create or update sync branch
+        if: steps.changes.outputs.changed == 'true'
         working-directory: project-a
         env:
           GH_TOKEN: ${{ secrets.PROJECT_A_PAT }}
         run: |
-          if git diff HEAD^ HEAD --quiet 2>/dev/null; then
-            echo "No changes to create PR."
-            exit 0
-          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          gh pr create \
+          BRANCH="chore/sync-test-skill"
+
+          git checkout -B "$BRANCH"
+
+          git add .github/skills/test-skill
+          git commit -m "chore: sync test-skill"
+
+          git push --force origin "$BRANCH"
+
+      - name: Create pull request if needed
+        if: steps.changes.outputs.changed == 'true'
+        working-directory: project-a
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_A_PAT }}
+        run: |
+          BRANCH="chore/sync-test-skill"
+
+          EXISTING_PR=$(gh pr list \
+            --head "$BRANCH" \
             --base main \
-            --head chore/update-test-skill \
-            --title "chore: update test-skill" \
-            --body "Sync test-skill from the central AI Skill repository."
+            --state open \
+            --json number \
+            --jq '.[0].number')
+
+          if [ -n "$EXISTING_PR" ]; then
+            echo "PR #$EXISTING_PR already exists. Branch has been updated."
+          else
+            gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "chore: sync test-skill" \
+              --body "Automatically sync test-skill from the central AI Skill repository."
+          fi
