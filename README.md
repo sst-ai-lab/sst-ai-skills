@@ -9,3 +9,4 @@ Central repository for reusable GitHub Copilot Agent Skills.
 - `scripts/validate-skills.sh`: Validates skill structure.
 - `scripts/sync-skills.sh`: Synchronizes configured skills into target repositories.
 - `.github/workflows/`: Validation and synchronization workflows.
+
