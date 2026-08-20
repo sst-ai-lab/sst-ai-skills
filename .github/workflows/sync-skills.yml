@@ -28,7 +28,7 @@ jobs:
         with:
           app-id: ${{ vars.AI_SKILL_SYNC_APP_ID }}
           private-key: ${{ secrets.AI_SKILL_SYNC_PRIVATE_KEY }}
-          owner: Thien3920
+          owner: sst-ai-lab
 
       - name: Sync skills
         env:
