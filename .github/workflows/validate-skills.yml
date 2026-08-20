@@ -1,0 +1,20 @@
+name: Validate AI Skills
+
+on:
+  pull_request:
+    paths:
+      - "skills/**"
+      - "distribution/**"
+      - "scripts/**"
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Validate skills
+        run: bash scripts/validate-skills.sh
