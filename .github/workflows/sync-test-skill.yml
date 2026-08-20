@@ -1,0 +1,58 @@
+name: Sync test-skill to project-a
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout skill repository
+        uses: actions/checkout@v4
+
+      - name: Clone project-a
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_A_PAT }}
+        run: |
+          git clone https://x-access-token:${GH_TOKEN}@github.com/Thien3920/project-a.git project-a
+
+      - name: Copy skill
+        run: |
+          mkdir -p project-a/.github/skills/test-skill
+          cp -R plugins/test-skill/skills/test-skill/* project-a/.github/skills/test-skill/
+
+      - name: Create branch and commit
+        working-directory: project-a
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          BRANCH="chore/update-test-skill"
+
+          git checkout -b "$BRANCH"
+          git add .github/skills/test-skill
+
+          if git diff --cached --quiet; then
+            echo "No skill changes."
+            exit 0
+          fi
+
+          git commit -m "chore: update test-skill"
+          git push --force origin "$BRANCH"
+
+      - name: Create pull request
+        working-directory: project-a
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_A_PAT }}
+        run: |
+          if git diff HEAD^ HEAD --quiet 2>/dev/null; then
+            echo "No changes to create PR."
+            exit 0
+          fi
+
+          gh pr create \
+            --base main \
+            --head chore/update-test-skill \
+            --title "chore: update test-skill" \
+            --body "Sync test-skill from the central AI Skill repository."
