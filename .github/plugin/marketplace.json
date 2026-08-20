@@ -8,10 +8,10 @@
   },
   "plugins": [
     {
-      "name": "java-review",
-      "description": "Java code review skills",
+      "name": "test-skill",
+      "description": "Test skills",
       "version": "1.0.0",
-      "source": "./plugins/java-review"
+      "source": "./plugins/test-skill"
     }
   ]
 }

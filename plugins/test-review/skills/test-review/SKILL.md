@@ -1,11 +1,11 @@
 ---
-name: java-review
-description: Review Java code for correctness, readability, maintainability, and common bugs.
+name: test-review
+description: Review test code for correctness, readability, maintainability, and common bugs.
 ---
 
-# Java Review
+# Test Review
 
-When reviewing Java code:
+When reviewing test code:
 
 1. Check for possible NullPointerException.
 2. Check exception handling.
