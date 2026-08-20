@@ -10,7 +10,7 @@
     {
       "name": "test-skill",
       "description": "Test skills",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "source": "./plugins/test-skill"
     }
   ]

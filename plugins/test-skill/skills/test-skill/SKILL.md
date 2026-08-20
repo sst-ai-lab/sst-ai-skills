@@ -13,3 +13,4 @@ When reviewing test code:
 4. Check duplicated code.
 5. Check resource handling.
 6. Report findings with file name and line number when possible.
+VERSION_TEST_1_1_0
