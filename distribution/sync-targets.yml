@@ -4,5 +4,4 @@ projects:
       - backend-skill
   sst-ai-lab/cm-fe-web:
     skills:
-      - backend-skill
       - frontend-skill
