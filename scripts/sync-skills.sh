@@ -158,7 +158,7 @@ while IFS='|' read -r repo skills_csv; do
     gh pr list \
       --repo "$repo" \
       --head "$BRANCH" \
-      --base main \
+      --base develop \
       --state open \
       --json number \
       --jq '.[0].number'
@@ -169,7 +169,7 @@ while IFS='|' read -r repo skills_csv; do
   else
     gh pr create \
       --repo "$repo" \
-      --base main \
+      --base develop \
       --head "$BRANCH" \
       --title "chore: sync AI skills" \
       --body "Automatically synchronized AI Skills from the central AI Skill repository."

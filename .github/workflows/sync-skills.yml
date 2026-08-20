@@ -3,7 +3,7 @@ name: Sync AI Skills
 on:
   push:
     branches:
-      - main
+      - develop
     paths:
       - "skills/**"
       - "distribution/sync-targets.yml"
