@@ -1,45 +1,52 @@
 # Contributing
 
-## Add or update a review skill
+## Marketplace layout
 
-1. Create or edit `skills/<skill-name>/SKILL.md`.
-2. Use lowercase kebab-case for the skill folder and frontmatter `name`.
+The repository root is a Claude Code marketplace. Add installable plugins under `plugins/<plugin-name>/`.
+
+Each plugin should follow the standard structure as needed:
+
+```text
+plugins/<plugin-name>/
+├── .claude-plugin/
+│   └── plugin.json
+├── commands/      # optional
+├── agents/        # optional
+├── skills/        # optional
+├── hooks/         # optional
+├── .mcp.json      # optional
+└── README.md
+```
+
+Do not place plugin commands or skills directly at the marketplace root.
+
+## Add a plugin
+
+1. Create `plugins/<plugin-name>/.claude-plugin/plugin.json`.
+2. Add only the plugin components that are actually used.
+3. Add the plugin entry to `.claude-plugin/marketplace.json` with a relative `source` such as `./plugins/<plugin-name>`.
+4. Add a plugin README with usage examples.
+5. Validate the marketplace with `claude plugin validate .`.
+6. Install/test from the marketplace before opening a pull request.
+
+## Add or update a skill
+
+For a skill inside an existing plugin:
+
+1. Create or edit `plugins/<plugin-name>/skills/<skill-name>/SKILL.md`.
+2. Use lowercase kebab-case for the skill folder and frontmatter `name` when provided.
 3. Give the skill a precise `description` so Claude can determine when it applies.
-4. Keep the skill focused on reusable domain knowledge and review guidance. Do not put CI-specific publishing logic in a skill.
-5. Add `references/` or `scripts/` under a skill only when they are actually required.
-6. Test the plugin locally before opening a pull request.
+4. Keep supporting references or scripts inside that skill directory only when they are actually needed.
+5. Avoid empty placeholder directories.
 
-## Update the review workflow
+## Add or update a command
 
-Edit `commands/review-pr.md` when changing how reviews are scoped, how base/head refs are resolved, or how findings are formatted.
+Create commands under `plugins/<plugin-name>/commands/`.
 
-The command must remain portable between local development and CI:
+Commands should orchestrate workflows. Domain conventions and reusable review knowledge should live in skills rather than being duplicated inside commands.
 
-- It may inspect Git state and source code.
-- It may emit markdown or structured JSON findings.
-- It must not modify project files, commit, push, or publish comments to GitHub.
-- Environment-specific publishing belongs in the CI adapter, not in the plugin command.
+For portable workflows, keep provider-specific publishing logic outside the plugin when possible. For example, `sst-code-review` emits findings while AWS CodeBuild handles GitHub Review API publishing separately.
 
-## Test locally
+## Versioning
 
-From the parent directory of this repository:
-
-```bash
-claude --plugin-dir ./sst-ai-skills
-```
-
-From a target repository, run for example:
-
-```text
-/sst-ai-skills:review-pr --base develop
-```
-
-For CI-oriented validation:
-
-```text
-/sst-ai-skills:review-pr --base develop --format json
-```
-
-## Plugin metadata
-
-Update `.claude-plugin/plugin.json` when plugin metadata or version changes.
+Update the plugin version in both its `.claude-plugin/plugin.json` and marketplace entry when publishing a deliberate plugin release. Update the marketplace version when marketplace metadata changes.
