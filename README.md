@@ -1,11 +1,36 @@
-# Company AI Skills
+# SST AI Skills
 
-Central repository for reusable GitHub Copilot Agent Skills.
+Central Claude Code plugin for shared SST AI engineering and code review skills.
 
-## Structure
+## Plugin structure
 
-- `skills/`: Source of truth for shared skills.
-- `distribution/sync-targets.yml`: Maps skills to target repositories.
-- `scripts/validate-skills.sh`: Validates skill structure.
-- `scripts/sync-skills.sh`: Synchronizes configured skills into target repositories.
-- `.github/workflows/`: Validation and synchronization workflows.
+```text
+sst-ai-skills/
+├── .claude-plugin/
+│   └── plugin.json
+└── skills/
+    ├── backend-skill/
+    │   └── SKILL.md
+    ├── frontend-skill/
+    │   └── SKILL.md
+    └── security-skill/
+        └── SKILL.md
+```
+
+Claude Code discovers skills from `skills/<skill-name>/SKILL.md` and namespaces them under the plugin name.
+
+## Test locally
+
+From the parent directory of this repository:
+
+```bash
+claude --plugin-dir ./sst-ai-skills
+```
+
+Then verify the plugin is loaded with `/help` or run a skill explicitly, for example:
+
+```text
+/sst-ai-skills:backend-skill
+```
+
+For CI environments such as AWS CodeBuild, load this repository as a Claude Code plugin before invoking Claude for review.
