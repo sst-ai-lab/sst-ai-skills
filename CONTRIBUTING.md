@@ -1,16 +1,52 @@
 # Contributing
 
-## Add a skill
+## Marketplace layout
 
-1. Create `skills/<skill-name>/SKILL.md`.
-2. Use lowercase kebab-case for the folder and frontmatter `name`.
-3. Add the skill to `distribution/sync-targets.yml`.
-4. Open a pull request.
+The repository root is a Claude Code marketplace. Add installable plugins under `plugins/<plugin-name>/`.
 
-## Update a skill
+Each plugin should follow the standard structure as needed:
 
-Edit the canonical skill under `skills/`.
+```text
+plugins/<plugin-name>/
+├── .claude-plugin/
+│   └── plugin.json
+├── commands/      # optional
+├── agents/        # optional
+├── skills/        # optional
+├── hooks/         # optional
+├── .mcp.json      # optional
+└── README.md
+```
 
-## Remove a skill from a project
+Do not place plugin commands or skills directly at the marketplace root.
 
-Remove it from that project's list in `distribution/sync-targets.yml`.
+## Add a plugin
+
+1. Create `plugins/<plugin-name>/.claude-plugin/plugin.json`.
+2. Add only the plugin components that are actually used.
+3. Add the plugin entry to `.claude-plugin/marketplace.json` with a relative `source` such as `./plugins/<plugin-name>`.
+4. Add a plugin README with usage examples.
+5. Validate the marketplace with `claude plugin validate .`.
+6. Install/test from the marketplace before opening a pull request.
+
+## Add or update a skill
+
+For a skill inside an existing plugin:
+
+1. Create or edit `plugins/<plugin-name>/skills/<skill-name>/SKILL.md`.
+2. Use lowercase kebab-case for the skill folder and frontmatter `name` when provided.
+3. Give the skill a precise `description` so Claude can determine when it applies.
+4. Keep supporting references or scripts inside that skill directory only when they are actually needed.
+5. Avoid empty placeholder directories.
+
+## Add or update a command
+
+Create commands under `plugins/<plugin-name>/commands/`.
+
+Commands should orchestrate workflows. Domain conventions and reusable review knowledge should live in skills rather than being duplicated inside commands.
+
+For portable workflows, keep provider-specific publishing logic outside the plugin when possible. For example, `sst-code-review` emits findings while AWS CodeBuild handles GitHub Review API publishing separately.
+
+## Versioning
+
+Update the plugin version in both its `.claude-plugin/plugin.json` and marketplace entry when publishing a deliberate plugin release. Update the marketplace version when marketplace metadata changes.
