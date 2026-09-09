@@ -1,0 +1,5 @@
+{
+  "name": "backend",
+  "description": "Shared SST backend engineering guidance for Claude Code.",
+  "version": "1.0.0"
+}
