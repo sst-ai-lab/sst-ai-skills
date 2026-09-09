@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "sst-ai-skills",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Private SST AI Claude Code plugin marketplace for shared backend and frontend engineering and review workflows.",
   "owner": {
     "name": "SST AI Lab"
@@ -10,7 +10,7 @@
     {
       "name": "backend",
       "description": "Shared SST backend engineering guidance and pull request review workflow for local development and AWS CodeBuild.",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "author": { "name": "SST AI Lab" },
       "source": "./plugins/backend",
       "category": "development"
