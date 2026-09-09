@@ -1,21 +1,27 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "sst-ai-skills",
-  "version": "1.0.0",
-  "description": "Private SST AI Claude Code plugin marketplace for shared engineering workflows and review conventions.",
+  "version": "1.2.0",
+  "description": "Private SST AI Claude Code plugin marketplace for shared backend and frontend engineering and review workflows.",
   "owner": {
     "name": "SST AI Lab"
   },
   "plugins": [
     {
-      "name": "sst-code-review",
-      "description": "Portable SST code review workflow for local development and AWS CodeBuild, backed by shared backend, frontend, and security review skills.",
-      "version": "1.0.0",
-      "author": {
-        "name": "SST AI Lab"
-      },
-      "source": "./plugins/sst-code-review",
-      "category": "productivity"
+      "name": "backend",
+      "description": "Shared SST backend engineering guidance and pull request review workflow for local development and AWS CodeBuild.",
+      "version": "1.1.0",
+      "author": { "name": "SST AI Lab" },
+      "source": "./plugins/backend",
+      "category": "development"
+    },
+    {
+      "name": "frontend",
+      "description": "Shared SST frontend engineering guidance and pull request review workflow for local development and AWS CodeBuild.",
+      "version": "1.1.0",
+      "author": { "name": "SST AI Lab" },
+      "source": "./plugins/frontend",
+      "category": "development"
     }
   ]
 }
