@@ -1,5 +1,5 @@
 {
   "name": "sst-ai-skills",
-  "description": "Shared SST AI engineering and code review skills for Claude Code.",
-  "version": "1.0.0"
+  "description": "Shared SST Claude Code review workflow and engineering review skills.",
+  "version": "1.1.0"
 }
