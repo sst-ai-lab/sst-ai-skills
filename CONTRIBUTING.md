@@ -20,6 +20,19 @@ plugins/<plugin-name>/
 
 Do not place plugin commands or skills directly at the marketplace root.
 
+## Plugin boundaries
+
+Split plugins by capability and repository type, not by Claude Code implementation detail.
+
+Current convention:
+
+- `backend`: backend development guidance.
+- `backend-review`: backend PR review workflow and review rules.
+- `frontend`: frontend development guidance.
+- `frontend-review`: frontend PR review workflow and review rules.
+
+Keep development guidance independent from review workflows so repositories can enable only what they need.
+
 ## Add a plugin
 
 1. Create `plugins/<plugin-name>/.claude-plugin/plugin.json`.
@@ -30,8 +43,6 @@ Do not place plugin commands or skills directly at the marketplace root.
 6. Install/test from the marketplace before opening a pull request.
 
 ## Add or update a skill
-
-For a skill inside an existing plugin:
 
 1. Create or edit `plugins/<plugin-name>/skills/<skill-name>/SKILL.md`.
 2. Use lowercase kebab-case for the skill folder and frontmatter `name` when provided.
@@ -45,7 +56,7 @@ Create commands under `plugins/<plugin-name>/commands/`.
 
 Commands should orchestrate workflows. Domain conventions and reusable review knowledge should live in skills rather than being duplicated inside commands.
 
-For portable workflows, keep provider-specific publishing logic outside the plugin when possible. For example, `sst-code-review` emits findings while AWS CodeBuild handles GitHub Review API publishing separately.
+For portable review workflows, keep provider-specific publishing logic outside the plugin. Review plugins emit findings; AWS CodeBuild or another CI adapter publishes them to GitHub.
 
 ## Versioning
 
