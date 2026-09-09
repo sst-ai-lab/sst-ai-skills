@@ -1,79 +1,88 @@
-# SST AI Skills
+# SST AI Skills Marketplace
 
-Central Claude Code plugin for reusable SST engineering review skills and a portable PR/branch review workflow.
+Private Claude Code plugin marketplace for shared SST AI engineering workflows and review conventions.
 
-## Plugin structure
+## Structure
 
 ```text
 sst-ai-skills/
 ├── .claude-plugin/
-│   └── plugin.json
-├── commands/
-│   └── review-pr.md
-├── skills/
-│   ├── backend-review/
-│   │   └── SKILL.md
-│   ├── frontend-review/
-│   │   └── SKILL.md
-│   └── security-review/
-│       └── SKILL.md
+│   └── marketplace.json
+├── plugins/
+│   └── sst-code-review/
+│       ├── .claude-plugin/
+│       │   └── plugin.json
+│       ├── commands/
+│       │   └── review-pr.md
+│       ├── skills/
+│       │   ├── backend-review/
+│       │   │   └── SKILL.md
+│       │   ├── frontend-review/
+│       │   │   └── SKILL.md
+│       │   └── security-review/
+│       │       └── SKILL.md
+│       └── README.md
 ├── README.md
 └── CONTRIBUTING.md
 ```
 
-The plugin separates review orchestration from review knowledge:
+The repository root is a Claude Code marketplace. Each directory under `plugins/` is an independently installable Claude Code plugin.
 
-- `commands/review-pr.md` defines the review workflow, diff scope, output contract, and local/CI behavior.
-- `skills/*/SKILL.md` contains reusable domain-specific review guidance.
+## Install locally
 
-## Test locally
+The repository is private, so make sure normal Git access works first, for example through `gh auth login`, SSH, or your configured Git credential helper.
 
-From the parent directory of this repository:
+Inside Claude Code, add the marketplace once:
+
+```text
+/plugin marketplace add sst-ai-lab/sst-ai-skills
+```
+
+Then install the review plugin:
+
+```text
+/plugin install sst-code-review@sst-ai-skills
+```
+
+The default install scope is user scope, so the plugin is available across local repositories for that developer.
+
+Then from any repository:
+
+```text
+/sst-code-review:review-pr
+```
+
+Or specify the base explicitly:
+
+```text
+/sst-code-review:review-pr --base develop
+```
+
+## Non-interactive / CI setup
+
+Claude Code also exposes plugin management commands suitable for automation:
 
 ```bash
-claude --plugin-dir ./sst-ai-skills
+claude plugin marketplace add sst-ai-lab/sst-ai-skills
+claude plugin install sst-code-review@sst-ai-skills
 ```
 
-Then run the review command from the target project repository.
+AWS CodeBuild can install the same marketplace/plugin and invoke the same review command with JSON output. GitHub comment publishing should remain a separate CI adapter.
 
-Default local review against `develop`:
+## Update
+
+After marketplace changes are published, refresh the local marketplace:
 
 ```text
-/sst-ai-skills:review-pr
+/plugin marketplace update sst-ai-skills
 ```
 
-Explicit base branch:
+Plugin installation and update behavior is managed by Claude Code's plugin cache; consuming projects do not copy `SKILL.md` files into their repositories.
 
-```text
-/sst-ai-skills:review-pr --base main
+## Validate
+
+Validate the marketplace before publishing changes:
+
+```bash
+claude plugin validate .
 ```
-
-Structured output for automation:
-
-```text
-/sst-ai-skills:review-pr --base develop --format json
-```
-
-The command reviews only the change set introduced by the current branch while allowing Claude to inspect related code for validation. It does not modify files, create commits, push code, or post GitHub comments.
-
-## AWS CodeBuild usage
-
-The same plugin and `review-pr` command can run in CodeBuild. When `CODEBUILD_WEBHOOK_BASE_REF` is available, the command uses it as the PR base unless `--base` is supplied explicitly.
-
-A CI adapter should handle environment-specific responsibilities separately:
-
-```text
-GitHub PR
-   ↓
-AWS CodeBuild
-   ↓
-Claude Code CLI + this plugin
-   ↓
-/sst-ai-skills:review-pr --format json
-   ↓
-review findings
-   ↓
-GitHub Review API adapter
-```
-
-Keeping GitHub publishing outside the plugin means developers can run exactly the same review workflow locally before pushing code.
