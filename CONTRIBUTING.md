@@ -22,16 +22,14 @@ Do not place plugin commands or skills directly at the marketplace root.
 
 ## Plugin boundaries
 
-Split plugins by capability and repository type, not by Claude Code implementation detail.
+Split plugins by repository/domain capability, not by whether content is a command or skill.
 
 Current convention:
 
-- `backend`: backend development guidance.
-- `backend-review`: backend PR review workflow and review rules.
-- `frontend`: frontend development guidance.
-- `frontend-review`: frontend PR review workflow and review rules.
+- `backend`: backend development guidance plus backend PR review workflow/rules.
+- `frontend`: frontend development guidance plus frontend PR review workflow/rules.
 
-Keep development guidance independent from review workflows so repositories can enable only what they need.
+A backend repository should only need the `backend` plugin; a frontend repository should only need the `frontend` plugin. Keep related development and review guidance together when they are expected to be installed and versioned together.
 
 ## Add a plugin
 
@@ -56,7 +54,7 @@ Create commands under `plugins/<plugin-name>/commands/`.
 
 Commands should orchestrate workflows. Domain conventions and reusable review knowledge should live in skills rather than being duplicated inside commands.
 
-For portable review workflows, keep provider-specific publishing logic outside the plugin. Review plugins emit findings; AWS CodeBuild or another CI adapter publishes them to GitHub.
+For portable review workflows, keep provider-specific publishing logic outside the plugin. The `review-pr` command emits findings; AWS CodeBuild or another CI adapter publishes them to GitHub.
 
 ## Versioning
 
