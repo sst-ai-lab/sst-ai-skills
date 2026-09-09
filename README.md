@@ -1,6 +1,6 @@
 # SST AI Skills
 
-Central Claude Code plugin for shared SST AI engineering and code review skills.
+Central Claude Code plugin for reusable SST engineering review skills and a portable PR/branch review workflow.
 
 ## Plugin structure
 
@@ -8,16 +8,23 @@ Central Claude Code plugin for shared SST AI engineering and code review skills.
 sst-ai-skills/
 ├── .claude-plugin/
 │   └── plugin.json
-└── skills/
-    ├── backend-skill/
-    │   └── SKILL.md
-    ├── frontend-skill/
-    │   └── SKILL.md
-    └── security-skill/
-        └── SKILL.md
+├── commands/
+│   └── review-pr.md
+├── skills/
+│   ├── backend-review/
+│   │   └── SKILL.md
+│   ├── frontend-review/
+│   │   └── SKILL.md
+│   └── security-review/
+│       └── SKILL.md
+├── README.md
+└── CONTRIBUTING.md
 ```
 
-Claude Code discovers skills from `skills/<skill-name>/SKILL.md` and namespaces them under the plugin name.
+The plugin separates review orchestration from review knowledge:
+
+- `commands/review-pr.md` defines the review workflow, diff scope, output contract, and local/CI behavior.
+- `skills/*/SKILL.md` contains reusable domain-specific review guidance.
 
 ## Test locally
 
@@ -27,10 +34,46 @@ From the parent directory of this repository:
 claude --plugin-dir ./sst-ai-skills
 ```
 
-Then verify the plugin is loaded with `/help` or run a skill explicitly, for example:
+Then run the review command from the target project repository.
+
+Default local review against `develop`:
 
 ```text
-/sst-ai-skills:backend-skill
+/sst-ai-skills:review-pr
 ```
 
-For CI environments such as AWS CodeBuild, load this repository as a Claude Code plugin before invoking Claude for review.
+Explicit base branch:
+
+```text
+/sst-ai-skills:review-pr --base main
+```
+
+Structured output for automation:
+
+```text
+/sst-ai-skills:review-pr --base develop --format json
+```
+
+The command reviews only the change set introduced by the current branch while allowing Claude to inspect related code for validation. It does not modify files, create commits, push code, or post GitHub comments.
+
+## AWS CodeBuild usage
+
+The same plugin and `review-pr` command can run in CodeBuild. When `CODEBUILD_WEBHOOK_BASE_REF` is available, the command uses it as the PR base unless `--base` is supplied explicitly.
+
+A CI adapter should handle environment-specific responsibilities separately:
+
+```text
+GitHub PR
+   ↓
+AWS CodeBuild
+   ↓
+Claude Code CLI + this plugin
+   ↓
+/sst-ai-skills:review-pr --format json
+   ↓
+review findings
+   ↓
+GitHub Review API adapter
+```
+
+Keeping GitHub publishing outside the plugin means developers can run exactly the same review workflow locally before pushing code.
