@@ -11,23 +11,21 @@ sst-ai-skills/
 ├── plugins/
 │   ├── backend/
 │   │   ├── .claude-plugin/plugin.json
-│   │   └── skills/backend/SKILL.md
-│   ├── backend-review/
-│   │   ├── .claude-plugin/plugin.json
 │   │   ├── commands/review-pr.md
-│   │   └── skills/backend-review/SKILL.md
-│   ├── frontend/
-│   │   ├── .claude-plugin/plugin.json
-│   │   └── skills/frontend/SKILL.md
-│   └── frontend-review/
+│   │   └── skills/
+│   │       ├── backend/SKILL.md
+│   │       └── backend-review/SKILL.md
+│   └── frontend/
 │       ├── .claude-plugin/plugin.json
 │       ├── commands/review-pr.md
-│       └── skills/frontend-review/SKILL.md
+│       └── skills/
+│           ├── frontend/SKILL.md
+│           └── frontend-review/SKILL.md
 ├── README.md
 └── CONTRIBUTING.md
 ```
 
-Each directory under `plugins/` is independently installable.
+Each repository type uses one plugin. The plugin contains both normal development guidance and its PR review workflow.
 
 ## Add the marketplace
 
@@ -41,46 +39,40 @@ Add the marketplace once per developer machine:
 
 ## Backend repositories
 
-Install the development guidance plugin:
+Install one plugin:
 
 ```text
 /plugin install backend@sst-ai-skills
 ```
 
-Install the review workflow when PR review is needed:
+The backend plugin provides the `backend` and `backend-review` skills plus the review command:
 
 ```text
-/plugin install backend-review@sst-ai-skills
+/backend:review-pr --base develop
 ```
 
-Run review:
-
-```text
-/backend-review:review-pr --base develop
-```
-
-A backend repository can share these choices through `.claude/settings.json`:
+A backend repository can commit `.claude/settings.json`:
 
 ```json
 {
   "enabledPlugins": {
-    "backend@sst-ai-skills": true,
-    "backend-review@sst-ai-skills": true
+    "backend@sst-ai-skills": true
   }
 }
 ```
 
 ## Frontend repositories
 
+Install one plugin:
+
 ```text
 /plugin install frontend@sst-ai-skills
-/plugin install frontend-review@sst-ai-skills
 ```
 
 Run review:
 
 ```text
-/frontend-review:review-pr --base develop
+/frontend:review-pr --base develop
 ```
 
 Example project settings:
@@ -88,17 +80,16 @@ Example project settings:
 ```json
 {
   "enabledPlugins": {
-    "frontend@sst-ai-skills": true,
-    "frontend-review@sst-ai-skills": true
+    "frontend@sst-ai-skills": true
   }
 }
 ```
 
 ## Local vs CI
 
-Development plugins (`backend`, `frontend`) provide reusable engineering guidance during normal Claude Code work.
+Local Claude Code and AWS CodeBuild use the same plugin and the same `review-pr` command. The command always applies the plugin's review skill and may use its development skill for surrounding implementation context.
 
-Review plugins (`backend-review`, `frontend-review`) provide explicit `review-pr` workflows. The same command can run locally or in AWS CodeBuild. CI can use `--format json` and publish findings through a separate GitHub Review API adapter.
+For CI, invoke the command with `--format json`. Publishing findings to GitHub Pull Request Review APIs remains a separate CodeBuild adapter.
 
 ## Update
 
