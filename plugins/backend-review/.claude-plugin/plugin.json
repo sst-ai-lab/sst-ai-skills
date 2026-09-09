@@ -1,5 +1,0 @@
-{
-  "name": "backend-review",
-  "description": "SST backend pull request review workflow for Claude Code.",
-  "version": "1.0.0"
-}
