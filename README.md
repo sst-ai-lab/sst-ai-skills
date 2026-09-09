@@ -1,6 +1,6 @@
 # SST AI Skills Marketplace
 
-Private Claude Code plugin marketplace for shared SST AI engineering workflows and review conventions.
+Private Claude Code plugin marketplace for shared SST engineering guidance and pull request review workflows.
 
 ## Structure
 
@@ -9,79 +9,106 @@ sst-ai-skills/
 ├── .claude-plugin/
 │   └── marketplace.json
 ├── plugins/
-│   └── sst-code-review/
-│       ├── .claude-plugin/
-│       │   └── plugin.json
-│       ├── commands/
-│       │   └── review-pr.md
-│       ├── skills/
-│       │   ├── backend-review/
-│       │   │   └── SKILL.md
-│       │   ├── frontend-review/
-│       │   │   └── SKILL.md
-│       │   └── security-review/
-│       │       └── SKILL.md
-│       └── README.md
+│   ├── backend/
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── skills/backend/SKILL.md
+│   ├── backend-review/
+│   │   ├── .claude-plugin/plugin.json
+│   │   ├── commands/review-pr.md
+│   │   └── skills/backend-review/SKILL.md
+│   ├── frontend/
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── skills/frontend/SKILL.md
+│   └── frontend-review/
+│       ├── .claude-plugin/plugin.json
+│       ├── commands/review-pr.md
+│       └── skills/frontend-review/SKILL.md
 ├── README.md
 └── CONTRIBUTING.md
 ```
 
-The repository root is a Claude Code marketplace. Each directory under `plugins/` is an independently installable Claude Code plugin.
+Each directory under `plugins/` is independently installable.
 
-## Install locally
+## Add the marketplace
 
-The repository is private, so make sure normal Git access works first, for example through `gh auth login`, SSH, or your configured Git credential helper.
+The repository is private, so normal Git access to `sst-ai-lab/sst-ai-skills` must work first.
 
-Inside Claude Code, add the marketplace once:
+Add the marketplace once per developer machine:
 
 ```text
 /plugin marketplace add sst-ai-lab/sst-ai-skills
 ```
 
-Then install the review plugin:
+## Backend repositories
+
+Install the development guidance plugin:
 
 ```text
-/plugin install sst-code-review@sst-ai-skills
+/plugin install backend@sst-ai-skills
 ```
 
-The default install scope is user scope, so the plugin is available across local repositories for that developer.
-
-Then from any repository:
+Install the review workflow when PR review is needed:
 
 ```text
-/sst-code-review:review-pr
+/plugin install backend-review@sst-ai-skills
 ```
 
-Or specify the base explicitly:
+Run review:
 
 ```text
-/sst-code-review:review-pr --base develop
+/backend-review:review-pr --base develop
 ```
 
-## Non-interactive / CI setup
+A backend repository can share these choices through `.claude/settings.json`:
 
-Claude Code also exposes plugin management commands suitable for automation:
-
-```bash
-claude plugin marketplace add sst-ai-lab/sst-ai-skills
-claude plugin install sst-code-review@sst-ai-skills
+```json
+{
+  "enabledPlugins": {
+    "backend@sst-ai-skills": true,
+    "backend-review@sst-ai-skills": true
+  }
+}
 ```
 
-AWS CodeBuild can install the same marketplace/plugin and invoke the same review command with JSON output. GitHub comment publishing should remain a separate CI adapter.
+## Frontend repositories
+
+```text
+/plugin install frontend@sst-ai-skills
+/plugin install frontend-review@sst-ai-skills
+```
+
+Run review:
+
+```text
+/frontend-review:review-pr --base develop
+```
+
+Example project settings:
+
+```json
+{
+  "enabledPlugins": {
+    "frontend@sst-ai-skills": true,
+    "frontend-review@sst-ai-skills": true
+  }
+}
+```
+
+## Local vs CI
+
+Development plugins (`backend`, `frontend`) provide reusable engineering guidance during normal Claude Code work.
+
+Review plugins (`backend-review`, `frontend-review`) provide explicit `review-pr` workflows. The same command can run locally or in AWS CodeBuild. CI can use `--format json` and publish findings through a separate GitHub Review API adapter.
 
 ## Update
 
-After marketplace changes are published, refresh the local marketplace:
+Refresh marketplace metadata after changes are published:
 
 ```text
 /plugin marketplace update sst-ai-skills
 ```
 
-Plugin installation and update behavior is managed by Claude Code's plugin cache; consuming projects do not copy `SKILL.md` files into their repositories.
-
 ## Validate
-
-Validate the marketplace before publishing changes:
 
 ```bash
 claude plugin validate .
