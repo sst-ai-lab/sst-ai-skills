@@ -58,4 +58,14 @@ For portable review workflows, keep provider-specific publishing logic outside t
 
 ## Versioning
 
-Update the plugin version in both its `.claude-plugin/plugin.json` and marketplace entry when publishing a deliberate plugin release. Update the marketplace version when marketplace metadata changes.
+Each plugin uses SemVer in its own `.claude-plugin/plugin.json`. Treat that manifest as the single source of truth for the plugin version; do not duplicate the plugin version in the marketplace entry.
+
+Bump the plugin version whenever a change to that plugin should be distributed to installed users. This includes changes to skills, commands, agents, hooks, plugin-local configuration, or other plugin content.
+
+Use the usual SemVer intent:
+
+- PATCH for backward-compatible fixes, wording/convention updates, and other non-breaking plugin changes.
+- MINOR for backward-compatible new capabilities or workflows.
+- MAJOR for breaking changes to plugin behavior, commands, or expected usage.
+
+Update the top-level marketplace version only when marketplace metadata itself changes.
