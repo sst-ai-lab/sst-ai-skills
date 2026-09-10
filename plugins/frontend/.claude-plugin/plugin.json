@@ -1,4 +1,5 @@
 {
   "name": "frontend",
-  "description": "Shared SST frontend engineering guidance and pull request review workflow for Claude Code."
+  "description": "Shared SST frontend engineering guidance and pull request review workflow for Claude Code.",
+  "version": "1.1.0"
 }
