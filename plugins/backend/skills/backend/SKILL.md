@@ -38,4 +38,6 @@ Do not load unrelated references just because they exist. Use progressive disclo
 
 For testable plugin releases, keep behavior changes small and easy to verify before adding broader conventions.
 
+When validating a plugin update, confirm both the reported plugin version and the loaded skill content.
+
 Do not perform unrelated refactors or introduce abstractions without a concrete need.
