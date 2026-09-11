@@ -11,6 +11,7 @@ Install from the `sst-ai-skills` marketplace:
 The plugin provides:
 - `backend` skill for implementation, refactoring, debugging, and design work.
 - `backend-review` skill for high-signal backend review rules.
+- `backend-security` skill for security-sensitive backend implementation and review.
 - `/backend:review-pr` command for local and CI pull request review.
 
 Example project settings:
