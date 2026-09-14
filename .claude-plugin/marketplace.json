@@ -8,24 +8,6 @@
   },
   "plugins": [
     {
-      "name": "backend",
-      "description": "Shared SST backend engineering guidance and pull request review workflow for local development and AWS CodeBuild.",
-      "author": {
-        "name": "SST AI Lab"
-      },
-      "source": "./plugins/backend",
-      "category": "development"
-    },
-    {
-      "name": "frontend",
-      "description": "Shared SST frontend engineering guidance and pull request review workflow for local development and AWS CodeBuild.",
-      "author": {
-        "name": "SST AI Lab"
-      },
-      "source": "./plugins/frontend",
-      "category": "development"
-    },
-    {
       "name": "backend-common",
       "description": "Shared skills for all SCM backend services (BFF and microservices): convention review, framework catalog, BFF and microservice scaffolding.",
       "author": {

@@ -1,8 +1,0 @@
-{
-  "name": "frontend",
-  "description": "Shared SST frontend engineering guidance and pull request review workflow for Claude Code.",
-  "version": "1.2.0",
-  "author": {
-    "name": "SST AI Lab"
-  }
-}
