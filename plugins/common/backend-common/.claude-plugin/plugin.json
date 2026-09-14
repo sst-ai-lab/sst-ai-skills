@@ -1,0 +1,8 @@
+{
+  "name": "backend-common",
+  "description": "Shared skills for all SCM backend services (BFF and microservices): convention review, framework catalog, BFF and microservice scaffolding.",
+  "version": "0.1.0",
+  "author": {
+    "name": "SST AI Lab"
+  }
+}
