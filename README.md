@@ -9,29 +9,42 @@ sst-ai-skills/
 ├── .claude-plugin/
 │   └── marketplace.json
 ├── plugins/
-│   ├── backend/
-│   │   ├── .claude-plugin/plugin.json
-│   │   ├── commands/review-pr.md
-│   │   └── skills/
-│   │       ├── backend/
-│   │       │   ├── SKILL.md
-│   │       │   └── references/
-│   │       ├── backend-review/SKILL.md
-│   │       └── backend-security/SKILL.md
-│   └── frontend/
-│       ├── .claude-plugin/plugin.json
-│       ├── commands/review-pr.md
-│       └── skills/
-│           ├── frontend/
-│           │   ├── SKILL.md
-│           │   └── references/
-│           ├── frontend-review/SKILL.md
-│           └── frontend-security/SKILL.md
+│   ├── common/                     # skills shared by 2+ repositories of a stack
+│   │   ├── backend-common/         # all cm-be-*: convention-review, framework-guide, bff-scaffold, ms-scaffold, /review-code
+│   │   ├── frontend-common/        # Vue web: vue-guide, screen-scaffold, convention-review
+│   │   ├── mobile-common/          # Flutter: /create-comment
+│   │   └── fw-be-common/           # sst-fw-be-* (no skills yet)
+│   ├── services/                   # skills used by exactly one repository
+│   │   ├── cm-be-bff-web/          # report-scaffold, integration-scaffold
+│   │   ├── cm-be-spec/             # openapi-scaffold, openapi-integration-scaffold
+│   │   ├── cm-be-ms-log/           # feature-scaffold, athena-guide
+│   │   ├── cm-be-ms-dailyinv/      # feature-scaffold, clickhouse-guide
+│   │   └── sst-fw-be-core/         # validation-scaffold, extension-guide
 ├── README.md
 └── CONTRIBUTING.md
 ```
 
-Each repository type uses one plugin. The plugin contains both normal development guidance and its PR review workflow.
+Each repository enables its stack's common plugin and, when one exists, its own service plugin. Repository-specific facts stay in the repository's `CLAUDE.md`. See `CONTRIBUTING.md` for placement and naming rules.
+
+| Repository | `enabledPlugins` |
+|---|---|
+| `cm-be-bff-web`, `cm-be-spec`, `cm-be-ms-log`, `cm-be-ms-dailyinv` | `backend-common` + the plugin named after the repository |
+| other `cm-be-*` | `backend-common` |
+| `cm-fe-web`, `manual-fe-web` | `frontend-common` |
+| `sst-fw-be-core` | `fw-be-common` + `sst-fw-be-core` |
+| other `sst-fw-be-*` | `fw-be-common` |
+| `cm-fe-mobile`, `sst-fw-mobile`, `sst-fw-widgetbook` | `mobile-common` |
+
+Example (`cm-be-bff-web/.claude/settings.json`):
+
+```json
+{
+  "enabledPlugins": {
+    "backend-common@sst-ai-skills": true,
+    "cm-be-bff-web@sst-ai-skills": true
+  }
+}
+```
 
 ## Add the marketplace
 
@@ -43,59 +56,23 @@ Add the marketplace once per developer machine:
 /plugin marketplace add sst-ai-lab/sst-ai-skills
 ```
 
-## Backend repositories
+## Install
 
-Install one plugin:
-
-```text
-/plugin install backend@sst-ai-skills
-```
-
-The backend plugin provides the `backend`, `backend-review`, and `backend-security` skills plus the review command:
+Plugins listed in a repository's `.claude/settings.json` `enabledPlugins` are installed and updated automatically at session start by that repository's `sync-plugins.mjs` hook. To install manually:
 
 ```text
-/backend:review-pr --base develop
+/plugin install backend-common@sst-ai-skills
+/plugin install cm-be-bff-web@sst-ai-skills
 ```
 
-A backend repository can commit `.claude/settings.json`:
+## Convention review
 
-```json
-{
-  "enabledPlugins": {
-    "backend@sst-ai-skills": true
-  }
-}
-```
-
-## Frontend repositories
-
-Install one plugin:
+Each stack has one `convention-review` skill (based on the cm-docs 開発規約) and a read-only `/review-code` command. The same skill serves the developer self-check and pull request review.
 
 ```text
-/plugin install frontend@sst-ai-skills
+/backend-common:review-code staged
+/frontend-common:review-code src/views/core/so/soMainte
 ```
-
-The frontend plugin provides the `frontend`, `frontend-review`, and `frontend-security` skills plus the review command:
-
-```text
-/frontend:review-pr --base develop
-```
-
-Example project settings:
-
-```json
-{
-  "enabledPlugins": {
-    "frontend@sst-ai-skills": true
-  }
-}
-```
-
-## Local vs CI
-
-Local Claude Code and AWS CodeBuild use the same plugin and the same `review-pr` command. The command always applies the plugin's review skill and may use its development skill for surrounding implementation context.
-
-For CI, invoke the command with `--format json`. Publishing findings to GitHub Pull Request Review APIs remains a separate CodeBuild adapter.
 
 ## Update
 

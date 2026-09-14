@@ -1,0 +1,8 @@
+{
+  "name": "sst-fw-be-core",
+  "description": "Skills specific to sst-fw-be-core: validation constraint scaffolding and extension utility guidance.",
+  "version": "0.1.0",
+  "author": {
+    "name": "SST AI Lab"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "cm-be-spec",
+  "description": "Skills specific to cm-be-spec: TypeSpec BFF and OpenAPI gRPC contract scaffolding.",
+  "version": "0.1.0",
+  "author": {
+    "name": "SST AI Lab"
+  }
+}
