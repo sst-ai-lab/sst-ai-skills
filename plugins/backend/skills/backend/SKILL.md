@@ -36,8 +36,4 @@ Multiple references may apply to the same change. For example, a Java gRPC servi
 
 Do not load unrelated references just because they exist. Use progressive disclosure: start with this skill, then consult only the reference files needed to understand the current task or validate a finding.
 
-For testable plugin releases, keep behavior changes small and easy to verify before adding broader conventions.
-
-When validating a plugin update, confirm both the reported plugin version and the loaded skill content.
-
 Do not perform unrelated refactors or introduce abstractions without a concrete need.
