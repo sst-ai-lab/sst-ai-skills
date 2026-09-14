@@ -13,14 +13,20 @@ sst-ai-skills/
 │   │   ├── .claude-plugin/plugin.json
 │   │   ├── commands/review-pr.md
 │   │   └── skills/
-│   │       ├── backend/SKILL.md
-│   │       └── backend-review/SKILL.md
+│   │       ├── backend/
+│   │       │   ├── SKILL.md
+│   │       │   └── references/
+│   │       ├── backend-review/SKILL.md
+│   │       └── backend-security/SKILL.md
 │   └── frontend/
 │       ├── .claude-plugin/plugin.json
 │       ├── commands/review-pr.md
 │       └── skills/
-│           ├── frontend/SKILL.md
-│           └── frontend-review/SKILL.md
+│           ├── frontend/
+│           │   ├── SKILL.md
+│           │   └── references/
+│           ├── frontend-review/SKILL.md
+│           └── frontend-security/SKILL.md
 ├── README.md
 └── CONTRIBUTING.md
 ```
@@ -45,7 +51,7 @@ Install one plugin:
 /plugin install backend@sst-ai-skills
 ```
 
-The backend plugin provides the `backend` and `backend-review` skills plus the review command:
+The backend plugin provides the `backend`, `backend-review`, and `backend-security` skills plus the review command:
 
 ```text
 /backend:review-pr --base develop
@@ -69,7 +75,7 @@ Install one plugin:
 /plugin install frontend@sst-ai-skills
 ```
 
-Run review:
+The frontend plugin provides the `frontend`, `frontend-review`, and `frontend-security` skills plus the review command:
 
 ```text
 /frontend:review-pr --base develop

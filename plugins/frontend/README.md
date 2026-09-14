@@ -11,6 +11,7 @@ Install from the `sst-ai-skills` marketplace:
 The plugin provides:
 - `frontend` skill for implementation, refactoring, debugging, and design work.
 - `frontend-review` skill for high-signal frontend review rules.
+- `frontend-security` skill for security-sensitive frontend implementation and review.
 - `/frontend:review-pr` command for local and CI pull request review.
 
 Example project settings:
