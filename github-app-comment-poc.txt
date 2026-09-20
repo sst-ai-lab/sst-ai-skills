@@ -1,0 +1,5 @@
+GitHub App comment PoC
+
+Line 1: normal PR comment test target
+Line 2: inline PR comment test target
+Line 3: another inline comment target
