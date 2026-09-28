@@ -128,9 +128,16 @@ bump_plugin() {
   local base="$2"
   local manifest="${dir}/.claude-plugin/plugin.json"
 
-  # Deleted in this commit, or new: not on the base branch yet.
+  # Deleted in this commit.
   git cat-file -e ":${manifest}" 2>/dev/null || return 0
-  git cat-file -e "${base}:${manifest}" 2>/dev/null || return 0
+
+  # New plugin: keeps its initial version.
+  if ! git cat-file -e "${base}:${manifest}" 2>/dev/null; then
+    err "${dir##*/} is not on ${base}; keeping its version." \
+      "Raise it yourself if ${base} is not the right base" \
+      "(git config sst.versionBase <remote>/<branch>)."
+    return 0
+  fi
 
   local staged base_version
   staged="$(git show ":${manifest}" | read_version)"

@@ -30,6 +30,16 @@ Hướng dẫn này dành cho bất kỳ ai thay đổi skill: sửa một quy t
 
 Sau đó các repository sẽ nhận thay đổi vào lần tiếp theo có người mở Claude Code trong đó.
 
+**Hook version.** Mỗi lần commit, một Git hook so `version` của từng plugin có thay đổi với `origin/develop`. Nếu bạn chưa tăng, hook tự tăng phần PATCH (`0.3.0` → `0.3.1`) và thêm `plugin.json` vào commit. Version bạn đã tự tăng (MINOR hoặc MAJOR) được giữ nguyên, và một nhánh có nhiều commit chỉ được tăng một lần. Để bỏ qua cho một commit: `SKIP_VERSION_BUMP=1 git commit ...`.
+
+Hook tự bật lần đầu bạn mở Claude Code trong repository này và chọn trust nó. Nếu bạn commit mà chưa từng mở Claude Code ở đây, hãy bật một lần cho mỗi clone:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+Nếu `plugin.json` có thay đổi chưa stage, hook sẽ dừng commit: hãy stage hoặc stash chúng, hoặc tự tăng version.
+
 **Mọi thứ nằm ở đâu.**
 
 ```text
