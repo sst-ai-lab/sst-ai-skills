@@ -245,3 +245,4 @@ are bespoke** — scaffold the classes, leave the streaming body as `// 要確�
 4. `App<Feature>Configuration` + `<Feature>Properties` bind `app.<feature>.*`.
 5. The endpoint exists in the spec and the `*Api`/models are on the classpath. **No tests generated.**
 6. Shared `com.fw.core.*` types reused, not redefined.
+7. End
