@@ -1,8 +1,0 @@
-{
-  "name": "fw-be-common",
-  "description": "Shared skills for SST backend framework repositories (sst-fw-be-*).",
-  "version": "0.1.0",
-  "author": {
-    "name": "SST AI Lab"
-  }
-}

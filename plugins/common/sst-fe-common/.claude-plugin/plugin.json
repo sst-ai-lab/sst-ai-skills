@@ -1,0 +1,8 @@
+{
+  "name": "sst-fe-common",
+  "description": "Shared by every SST Vue repository (cm-fe-* web and sst-fw-web): the frontend development standards (フロントエンド開発規約) and the Vue / API client conventions with the sst-fw-web catalog.",
+  "version": "0.2.0",
+  "author": {
+    "name": "SST Development Team"
+  }
+}

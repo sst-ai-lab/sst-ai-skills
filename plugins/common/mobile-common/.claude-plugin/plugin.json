@@ -1,8 +1,0 @@
-{
-  "name": "mobile-common",
-  "description": "Shared commands for SCM Flutter repositories (app, sst-fw-mobile, widgetbook).",
-  "version": "0.1.0",
-  "author": {
-    "name": "SST AI Lab"
-  }
-}

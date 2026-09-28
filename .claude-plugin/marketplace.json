@@ -1,53 +1,89 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "sst-ai-skills",
-  "version": "1.3.0",
+  "version": "2.0.0",
   "description": "Private SST AI Claude Code plugin marketplace: shared (common) and service-specific skills for SCM repositories.",
   "owner": {
-    "name": "SST AI Lab"
+    "name": "SST Development Team"
   },
   "plugins": [
     {
-      "name": "backend-common",
-      "description": "Shared skills for all SCM backend services (BFF and microservices): convention review, framework catalog, BFF and microservice scaffolding.",
+      "name": "sst-common",
+      "description": "Shared by every SST repository, whatever its stack: the /review-code command, which runs the check-* skills (check-conventions, ...) of the other enabled plugins.",
       "author": {
-        "name": "SST AI Lab"
+        "name": "SST Development Team"
       },
-      "source": "./plugins/common/backend-common",
+      "source": "./plugins/common/sst-common",
       "category": "development"
     },
     {
-      "name": "frontend-common",
-      "description": "Shared skills for SCM Vue web frontends built on sst-fw-web: screen scaffolding, Vue and API client conventions, convention review.",
+      "name": "sst-be-common",
+      "description": "Shared by every SST Java repository (cm-be-* and sst-fw-be-*): the backend development standards (バックエンド開発規約) and the catalog of the internal sst-fw-be-* framework.",
       "author": {
-        "name": "SST AI Lab"
+        "name": "SST Development Team"
       },
-      "source": "./plugins/common/frontend-common",
+      "source": "./plugins/common/sst-be-common",
       "category": "development"
     },
     {
-      "name": "mobile-common",
-      "description": "Shared commands for SCM Flutter repositories (app, sst-fw-mobile, widgetbook).",
+      "name": "cm-be-bff-common",
+      "description": "Shared skills for the SCM BFF services (cm-be-bff-*): BFF feature scaffolding.",
       "author": {
-        "name": "SST AI Lab"
+        "name": "SST Development Team"
       },
-      "source": "./plugins/common/mobile-common",
+      "source": "./plugins/common/cm-be-bff-common",
       "category": "development"
     },
     {
-      "name": "fw-be-common",
+      "name": "cm-be-ms-common",
+      "description": "Shared skills for the SCM microservices (cm-be-ms-*): microservice feature scaffolding.",
+      "author": {
+        "name": "SST Development Team"
+      },
+      "source": "./plugins/common/cm-be-ms-common",
+      "category": "development"
+    },
+    {
+      "name": "sst-fe-common",
+      "description": "Shared by every SST Vue repository (cm-fe-* web and sst-fw-web): the frontend development standards (フロントエンド開発規約) and the Vue / API client conventions with the sst-fw-web catalog.",
+      "author": {
+        "name": "SST Development Team"
+      },
+      "source": "./plugins/common/sst-fe-common",
+      "category": "development"
+    },
+    {
+      "name": "cm-fe-web-common",
+      "description": "Shared skills for the SCM Vue web applications (cm-fe-web, manual-fe-web): screen scaffolding.",
+      "author": {
+        "name": "SST Development Team"
+      },
+      "source": "./plugins/common/cm-fe-web-common",
+      "category": "development"
+    },
+    {
+      "name": "sst-mobile-common",
+      "description": "Shared by every SST Flutter repository (cm-fe-mobile, sst-fw-mobile, sst-fw-widgetbook): the mobile development standards (モバイル開発規約) and the /create-comment command.",
+      "author": {
+        "name": "SST Development Team"
+      },
+      "source": "./plugins/common/sst-mobile-common",
+      "category": "development"
+    },
+    {
+      "name": "sst-fw-be-common",
       "description": "Shared skills for SST backend framework repositories (sst-fw-be-*).",
       "author": {
-        "name": "SST AI Lab"
+        "name": "SST Development Team"
       },
-      "source": "./plugins/common/fw-be-common",
+      "source": "./plugins/common/sst-fw-be-common",
       "category": "development"
     },
     {
       "name": "cm-be-bff-web",
       "description": "Skills specific to cm-be-bff-web: JasperReports report and external integration scaffolding.",
       "author": {
-        "name": "SST AI Lab"
+        "name": "SST Development Team"
       },
       "source": "./plugins/services/cm-be-bff-web",
       "category": "development"
@@ -56,7 +92,7 @@
       "name": "cm-be-spec",
       "description": "Skills specific to cm-be-spec: TypeSpec BFF and OpenAPI gRPC contract scaffolding.",
       "author": {
-        "name": "SST AI Lab"
+        "name": "SST Development Team"
       },
       "source": "./plugins/services/cm-be-spec",
       "category": "development"
@@ -65,7 +101,7 @@
       "name": "cm-be-ms-log",
       "description": "Skills specific to cm-be-ms-log: log search/ingest feature scaffolding and AWS Athena client guidance.",
       "author": {
-        "name": "SST AI Lab"
+        "name": "SST Development Team"
       },
       "source": "./plugins/services/cm-be-ms-log",
       "category": "development"
@@ -74,7 +110,7 @@
       "name": "cm-be-ms-dailyinv",
       "description": "Skills specific to cm-be-ms-dailyinv: dual-datasource (PostgreSQL + ClickHouse) feature scaffolding.",
       "author": {
-        "name": "SST AI Lab"
+        "name": "SST Development Team"
       },
       "source": "./plugins/services/cm-be-ms-dailyinv",
       "category": "development"
@@ -83,7 +119,7 @@
       "name": "sst-fw-be-core",
       "description": "Skills specific to sst-fw-be-core: validation constraint scaffolding and extension utility guidance.",
       "author": {
-        "name": "SST AI Lab"
+        "name": "SST Development Team"
       },
       "source": "./plugins/services/sst-fw-be-core",
       "category": "development"

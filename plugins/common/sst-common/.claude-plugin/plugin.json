@@ -1,0 +1,8 @@
+{
+  "name": "sst-common",
+  "description": "Shared by every SST repository, whatever its stack: the /review-code command, which runs the check-* skills (check-conventions, ...) of the other enabled plugins.",
+  "version": "0.2.1",
+  "author": {
+    "name": "SST Development Team"
+  }
+}

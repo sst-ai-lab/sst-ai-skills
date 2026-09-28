@@ -1,0 +1,8 @@
+{
+  "name": "sst-be-common",
+  "description": "Shared by every SST Java repository (cm-be-* and sst-fw-be-*): the backend development standards (バックエンド開発規約) and the catalog of the internal sst-fw-be-* framework.",
+  "version": "0.4.4",
+  "author": {
+    "name": "SST Development Team"
+  }
+}

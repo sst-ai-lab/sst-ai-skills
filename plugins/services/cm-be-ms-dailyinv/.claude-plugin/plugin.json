@@ -1,8 +1,8 @@
 {
   "name": "cm-be-ms-dailyinv",
   "description": "Skills specific to cm-be-ms-dailyinv: dual-datasource (PostgreSQL + ClickHouse) feature scaffolding.",
-  "version": "0.1.0",
+  "version": "0.2.2",
   "author": {
-    "name": "SST AI Lab"
+    "name": "SST Development Team"
   }
 }

@@ -1,8 +1,8 @@
 {
   "name": "cm-be-ms-log",
   "description": "Skills specific to cm-be-ms-log: log search/ingest feature scaffolding and AWS Athena client guidance.",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "author": {
-    "name": "SST AI Lab"
+    "name": "SST Development Team"
   }
 }

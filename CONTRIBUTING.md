@@ -1,92 +1,194 @@
 # Contributing
 
-## Marketplace layout
+This guide is for anyone who changes the skills: fixes a rule, adds a skill or adds a plugin.
 
-The repository root is a Claude Code marketplace. Add installable plugins under `plugins/common/<plugin-name>/` or `plugins/services/<plugin-name>/`.
+**On this page**
 
-Each plugin should follow the standard structure as needed:
+- [1. Before you start](#1-before-you-start)
+- [2. Common tasks](#2-common-tasks)
+  - [2.1 Fix or improve a skill](#21-fix-or-improve-a-skill)
+  - [2.2 Add a skill](#22-add-a-skill)
+  - [2.3 Rename or remove a skill](#23-rename-or-remove-a-skill)
+  - [2.4 Add a plugin](#24-add-a-plugin)
+  - [2.5 Rename or remove a plugin](#25-rename-or-remove-a-plugin)
+- [3. Test your change](#3-test-your-change)
+- [4. Reference](#4-reference)
+  - [4.1 Which version to raise](#41-which-version-to-raise)
+  - [4.2 Where content belongs](#42-where-content-belongs)
+  - [4.3 Common plugins work for any repository](#43-common-plugins-work-for-any-repository)
+  - [4.4 Naming](#44-naming)
+  - [4.5 Writing a skill](#45-writing-a-skill)
+  - [4.6 Writing a command](#46-writing-a-command)
+  - [4.7 Review standards](#47-review-standards)
+
+## 1. Before you start
+
+**How a change reaches the repositories.** A repository installs the plugins from the `develop` branch of this repository, and only updates a plugin when its `version` has changed. So every change needs two things:
+
+1. a new `version` in the plugin's `.claude-plugin/plugin.json`;
+2. a merge into `develop`.
+
+Repositories then pick it up the next time someone opens Claude Code in them.
+
+**Where things are.**
 
 ```text
-plugins/<common|services>/<plugin-name>/
+sst-ai-skills/
 ├── .claude-plugin/
-│   └── plugin.json
-├── commands/      # optional
-├── agents/        # optional
-├── skills/        # optional
-├── hooks/         # optional
-├── .mcp.json      # optional
-└── README.md
+│   └── marketplace.json          # the list of plugins
+└── plugins/
+    ├── common/<plugin>/          # shared by every repository of a stack
+    └── services/<plugin>/        # used by one repository, named after it
+        ├── .claude-plugin/
+        │   └── plugin.json       # name and version of the plugin
+        ├── skills/
+        │   └── <skill>/
+        │       ├── SKILL.md      # what Claude reads
+        │       └── references/   # documents SKILL.md points to
+        ├── commands/             # slash commands, if any
+        └── README.md             # what the plugin's skills do
 ```
 
-Do not place plugin commands or skills directly at the marketplace root.
+## 2. Common tasks
 
-## Plugin boundaries
+### 2.1 Fix or improve a skill
 
-Split plugins by who uses the content, not by whether content is a command or skill.
+1. Edit the skill's `SKILL.md` or its `references/`.
+2. In the plugin's `.claude-plugin/plugin.json`, raise the PATCH part of `version`: `0.3.0` → `0.3.1`.
+3. [Test your change](#3-test-your-change).
+4. Open a pull request to `develop`.
 
-| Content | Location |
-|---|---|
-| Facts about one repository (purpose, ports, topics, chosen policies) | That repository's `CLAUDE.md` — never a plugin |
-| Skill or command used by two or more repositories of the same stack | `plugins/common/<stack>-common` |
-| Skill or command used by exactly one repository | `plugins/services/<repository-name>` |
+### 2.2 Add a skill
 
-Current plugins:
+1. Decide where it goes: in the common plugin of the stack if several repositories need it, in the repository's service plugin otherwise. See [Where content belongs](#42-where-content-belongs).
+2. Create `plugins/<common|services>/<plugin>/skills/<skill-name>/SKILL.md`. Name it as described in [Naming](#44-naming), and follow [Writing a skill](#45-writing-a-skill).
+3. Raise the MINOR part of the plugin `version`: `0.3.0` → `0.4.0`.
+4. Add the skill to the plugin's `README.md` and to [What's included](README.md#2-whats-included) in the README.
+5. [Test your change](#3-test-your-change), then open a pull request to `develop`.
 
-- Common: `backend-common` (all `cm-be-*`), `frontend-common` (Vue web frontends), `mobile-common` (Flutter), `fw-be-common` (`sst-fw-be-*`).
-- Services: `cm-be-bff-web`, `cm-be-spec`, `cm-be-ms-log`, `cm-be-ms-dailyinv`, `sst-fw-be-core`.
+The repositories need no change: they get the new skill with the new version.
 
-A repository enables its stack's common plugin plus, only when it exists, its own service plugin. Create a service plugin only when the repository has at least one specific skill. When a second repository starts using a service skill, move it to the common plugin and bump both plugins.
+### 2.3 Rename or remove a skill
 
-### Common plugins are service-neutral
+1. Rename or delete the skill's folder.
+2. Search the other skills and commands for the old name, and update them.
+3. Raise the MAJOR part of the plugin `version`: `0.3.0` → `1.0.0`.
+4. Update the plugin's `README.md` and [What's included](README.md#2-whats-included) in the README.
+5. [Test your change](#3-test-your-change), then open a pull request to `develop`.
+6. Notify the teams of the new name.
 
-Content in `plugins/common` must work unchanged for a brand-new repository of the same kind:
+### 2.4 Add a plugin
 
-- Do not write repository names, ports, topics, table names, service exception classes, gRPC channel names or service base packages. Use placeholders such as `{basePackage}`, `{grpcChannel}`, `{serviceException}`.
-- Architectural roles (BFF, microservice, gRPC server/client, Kafka consumer) and shared framework names (`sst-fw-be-*`, `sst-fw-web`) are allowed.
-- When services legitimately differ, keep each rule as a named variant and let the repository `CLAUDE.md` select it.
-- Each common skill lists its `## Inputs from CLAUDE.md`. Placeholder values come from the repository `CLAUDE.md` sections `## Service profile` and `## Policies`; when a value is missing the skill asks instead of guessing.
+1. Create `plugins/<common|services>/<plugin>/` with:
+   - `.claude-plugin/plugin.json`, with `version` `0.1.0`;
+   - at least one skill;
+   - a `README.md` that lists the skills and the repositories that enable the plugin.
+2. Add the plugin to `.claude-plugin/marketplace.json`, with `source` set to its folder (for example `./plugins/services/<plugin>`), and raise the MINOR part of the marketplace `version`.
+3. In the README, add the plugin to [What's included](README.md#2-whats-included) and to the repositories that use it in [Rollout status](README.md#31-rollout-status).
+4. [Test your change](#3-test-your-change), then open a pull request to `develop`.
+5. After the merge, add `"<plugin>@sst-ai-skills": true` to `enabledPlugins` in `.claude/settings.json` of each repository that uses it.
 
-### Naming
+### 2.5 Rename or remove a plugin
 
-- Plugins: `<stack>-common` or the exact repository name.
-- Skills: `<subject>-<kind>`, where kind is `guide` (conventions/knowledge), `scaffold` (generate code) or `review` (check against conventions). Do not repeat the plugin name; skills are already namespaced (`/backend-common:ms-scaffold`). A `bff-` / `ms-` prefix is allowed in common plugins when a skill applies to one architectural role only.
-- Commands: a verb phrase (`review-code`, `create-comment`).
+1. Rename or delete the plugin's folder, update `.claude-plugin/marketplace.json`, and raise the MAJOR part of the marketplace `version`.
+2. Update [What's included](README.md#2-whats-included) and [Rollout status](README.md#31-rollout-status) in the README.
+3. [Test your change](#3-test-your-change), then open a pull request to `develop`.
+4. After the merge, rename or remove the plugin in `enabledPlugins` of each repository that enables it. Until then, Claude Code reports it as missing every time it starts there.
 
-## Add a plugin
+## 3. Test your change
 
-1. Create `plugins/<common|services>/<plugin-name>/.claude-plugin/plugin.json`.
-2. Add only the plugin components that are actually used.
-3. Add the plugin entry to `.claude-plugin/marketplace.json` with a relative `source` such as `./plugins/services/<plugin-name>`.
-4. Add a plugin README with usage examples.
-5. Validate the marketplace with `claude plugin validate .`.
-6. Install/test from the marketplace before opening a pull request.
+1. Check that the marketplace is valid:
 
-## Add or update a skill
+   ```bash
+   claude plugin validate .
+   ```
 
-1. Create or edit `plugins/<common|services>/<plugin-name>/skills/<skill-name>/SKILL.md`.
-2. Use lowercase kebab-case for the skill folder and frontmatter `name` when provided.
-3. Give the skill a precise `description` so Claude can determine when it applies.
-4. Keep supporting references or scripts inside that skill directory only when they are actually needed.
-5. Avoid empty placeholder directories.
+   It should end with `Validation passed`.
 
-## Add or update a command
+2. Try the changed plugin in a repository that uses it. From that repository:
 
-Create commands under `plugins/<common|services>/<plugin-name>/commands/`.
+   ```bash
+   claude --plugin-dir <path-to-sst-ai-skills>/plugins/<common|services>/<plugin>
+   ```
 
-Commands should orchestrate workflows. Domain conventions and reusable review knowledge should live in skills rather than being duplicated inside commands.
+   Claude Code loads your local copy of the plugin for this session only. Ask for the task the skill covers, and check the result.
 
-For portable review workflows, keep provider-specific publishing logic outside the plugin. The `review-code` commands emit findings only; publishing them to GitHub (for example from AWS CodeBuild) belongs to a separate CI adapter.
+## 4. Reference
 
-## Versioning
+### 4.1 Which version to raise
 
-Each plugin uses SemVer in its own `.claude-plugin/plugin.json`. Treat that manifest as the single source of truth for the plugin version; do not duplicate the plugin version in the marketplace entry.
+| Change | Plugin `version` (`plugin.json`) | Marketplace `version` (`marketplace.json`) | Change in each repository |
+|---|---|---|---|
+| Fix or reword a skill | PATCH (0.3.0 → 0.3.1) | — | None |
+| Add a skill | MINOR (0.3.0 → 0.4.0) | — | None |
+| Rename or remove a skill | MAJOR (0.3.0 → 1.0.0) | — | None |
+| Move a skill to another plugin | MINOR for the plugin that gets it, MAJOR for the one that loses it | — | Enable the plugin that gets it, if not enabled yet |
+| Add a plugin | Starts at 0.1.0 | MINOR (1.4.0 → 1.5.0) | Enable it where it is used |
+| Rename or remove a plugin | — | MAJOR (1.4.0 → 2.0.0) | Rename or remove it where it is enabled |
 
-Bump the plugin version whenever a change to that plugin should be distributed to installed users. This includes changes to skills, commands, agents, hooks, plugin-local configuration, or other plugin content.
+The plugin `version` lives only in its `plugin.json`; do not repeat it in `marketplace.json`.
 
-Use the usual SemVer intent:
+### 4.2 Where content belongs
 
-- PATCH for backward-compatible fixes, wording/convention updates, and other non-breaking plugin changes.
-- MINOR for backward-compatible new capabilities or workflows.
-- MAJOR for breaking changes to plugin behavior, commands, or expected usage.
+Plugins are layered by how widely their content applies:
 
-Update the top-level marketplace version only when marketplace metadata itself changes.
+| Content | Goes in | Example |
+|---|---|---|
+| Facts about one repository: purpose, ports, topics, the policies it chose | that repository's `CLAUDE.md`, never a plugin | — |
+| A command every repository uses, whatever its stack | `plugins/common/sst-common` | `/review-code` |
+| Development standards or a framework catalog for a whole stack | `plugins/common/sst-<stack>-common` | `sst-be-common`, `sst-fe-common`, `sst-mobile-common` |
+| Code generation, or rules, for one kind of repository | `plugins/common/cm-<family>-common` or `plugins/common/sst-fw-<stack>-common` | `cm-be-ms-common`, `sst-fw-be-common` |
+| A skill or command only one repository uses | `plugins/services/<repository-name>` | `cm-be-ms-log` |
+
+- Put a skill in the narrowest layer that fits. When a second repository needs it, move it up one layer.
+- Create a service plugin only when the repository has at least one skill of its own.
+- Create a plugin only once it has content. An empty plugin in the tables misleads whoever enables it.
+- A repository enables one plugin per layer that applies to it, so most repositories enable three.
+
+### 4.3 Common plugins work for any repository
+
+A skill in `plugins/common` must work, unchanged, in a new repository of the same kind.
+
+- Do not write repository names, ports, topics, table names, service exception classes, gRPC channel names or service base packages. Use placeholders instead, such as `{basePackage}`, `{grpcChannel}`, `{serviceException}`.
+- Architectural roles (BFF, microservice, gRPC server or client, Kafka consumer) and shared framework names (`sst-fw-be-*`, `sst-fw-web`) are fine.
+- When services legitimately differ, keep each approach as a named variant, and let the repository's `CLAUDE.md` select it.
+- List the placeholders a skill needs in its `## Inputs from CLAUDE.md` section. Their values come from the `## Service profile` and `## Policies` sections of the repository's `CLAUDE.md`. When one is missing, the skill asks the developer instead of guessing.
+
+### 4.4 Naming
+
+- **Plugins:** the name says where the plugin applies. `sst-common` for every repository; `sst-<stack>-common` for a whole stack, products and frameworks alike (`sst-be-common`, `sst-fe-common`, `sst-mobile-common`); `cm-<family>-common` for one product family (`cm-be-bff-common`, `cm-be-ms-common`, `cm-fe-web-common`); `sst-fw-<stack>-common` for the framework repositories (`sst-fw-be-common`); and the exact repository name for a service plugin (`cm-be-ms-log`).
+- **Skills:** a verb and an object, `<verb>-<object>`, that says what the skill does. Developers type it as a command (`/cm-be-ms-common:scaffold-ms-feature`), so it should read as one. Use one of four verbs:
+
+  | Verb | The skill | Example |
+  |---|---|---|
+  | `scaffold-` | generates new code | `scaffold-screen` |
+  | `check-` | compares code with written standards | `check-conventions`, `check-security` |
+  | `use-` | shows what already exists, so it gets reused | `use-sst-framework` |
+  | `write-` | holds the rules for writing one kind of code by hand | `write-athena-clients` |
+
+  Make the object specific (`scaffold-log-feature`, not `scaffold-feature`), and do not repeat the plugin name. In a common plugin, a `bff-` or `ms-` prefix is fine for a skill that only applies to one role.
+- **Commands:** the same verb-object form (`review-code`, `create-comment`).
+
+### 4.5 Writing a skill
+
+- Name the folder and the frontmatter `name` in lowercase kebab-case.
+- Write a precise `description`. Claude reads it to decide when to use the skill.
+- Keep only the references and scripts the skill uses, inside its own folder.
+- Do not create empty placeholder folders.
+
+### 4.6 Writing a command
+
+- Put commands in `plugins/<common|services>/<plugin>/commands/`.
+- A command runs the steps of a workflow. Keep the rules and knowledge it needs in skills, not in the command.
+
+### 4.7 Review standards
+
+`/sst-common:review-code` has no standards of its own. It loads every skill whose name starts with `check-` in the plugins the repository enables, and applies each to the files its description covers. To add standards (for a new stack, for rules only one repository follows, or for a new area such as security), add such a skill; `sst-common` does not change.
+
+- Name the skill `check-<area>`: `check-conventions` for the development standards, `check-security` for security rules, and so on. Skills with other names are not loaded.
+- Base it on written rules that have an identifier, such as a section number or a checklist ID. The command reports only what a document states, and quotes the rule. A skill that looks for bugs without written rules is not a `check-` skill.
+- Say in its description which files it covers, for example "changed Java code" or ".vue / use*.ts".
+- Keep the documents it points to in the same plugin. If one document wins over another (the standard over a checklist), say so in `SKILL.md`.
+- In a service plugin, write only what differs from the stack's skill of the same name: both apply.
+
+The command only reports findings. Posting them on a pull request is done by each repository's CI (for example the `pr-review` scripts of `cm-be-bff-api`), not by the plugin.

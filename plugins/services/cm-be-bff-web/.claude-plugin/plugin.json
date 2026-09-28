@@ -1,8 +1,8 @@
 {
   "name": "cm-be-bff-web",
   "description": "Skills specific to cm-be-bff-web: JasperReports report and external integration scaffolding.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
-    "name": "SST AI Lab"
+    "name": "SST Development Team"
   }
 }

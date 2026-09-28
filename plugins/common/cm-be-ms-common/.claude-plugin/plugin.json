@@ -1,0 +1,8 @@
+{
+  "name": "cm-be-ms-common",
+  "description": "Shared skills for the SCM microservices (cm-be-ms-*): microservice feature scaffolding.",
+  "version": "0.6.0",
+  "author": {
+    "name": "SST Development Team"
+  }
+}

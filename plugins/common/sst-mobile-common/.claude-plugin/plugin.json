@@ -1,0 +1,8 @@
+{
+  "name": "sst-mobile-common",
+  "description": "Shared by every SST Flutter repository (cm-fe-mobile, sst-fw-mobile, sst-fw-widgetbook): the mobile development standards (モバイル開発規約) and the /create-comment command.",
+  "version": "0.1.0",
+  "author": {
+    "name": "SST Development Team"
+  }
+}
