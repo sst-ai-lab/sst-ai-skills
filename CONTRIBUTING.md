@@ -30,6 +30,16 @@ This guide is for anyone who changes the skills: fixes a rule, adds a skill or a
 
 Repositories then pick it up the next time someone opens Claude Code in them.
 
+**The version hook.** On every commit, a Git hook compares each changed plugin's `version` with `origin/develop`. If you have not raised it, the hook raises the PATCH part for you (`0.3.0` → `0.3.1`) and adds `plugin.json` to the commit. A version you raised yourself (MINOR or MAJOR) is kept, and a branch with several commits is raised only once. To skip it for one commit: `SKIP_VERSION_BUMP=1 git commit ...`.
+
+The hook turns itself on the first time you open Claude Code in this repository and trust it. If you commit without ever opening Claude Code here, turn it on once per clone:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+If `plugin.json` has changes you have not staged, the hook stops the commit: stage or stash them, or raise the version yourself.
+
 **Where things are.**
 
 ```text

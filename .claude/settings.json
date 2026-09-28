@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && [ \"$(git config --get core.hooksPath)\" = .githooks ] || git config core.hooksPath .githooks"
+          }
+        ]
+      }
+    ]
+  }
+}

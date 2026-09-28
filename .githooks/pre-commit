@@ -1,0 +1,186 @@
+#!/usr/bin/env bash
+#
+# Git pre-commit hook: raises the PATCH version of each plugin with staged
+# changes, unless its staged version is already higher than on the base branch.
+#
+# - The base is the remote branch the repositories install from
+#   (origin/develop by default), so a branch is raised once, however many
+#   commits it has.
+# - A version you raised yourself (PATCH, MINOR or MAJOR) is kept.
+# - A plugin that is not on the base branch yet keeps its version.
+#
+# Enable once per clone:  git config core.hooksPath .githooks
+# Other base branch:      git config sst.versionBase origin/main
+# Skip for one commit:    SKIP_VERSION_BUMP=1 git commit ...
+
+set -euo pipefail
+
+readonly DEFAULT_BASE="origin/develop"
+readonly FETCH_TIMEOUT_SECONDS=15
+readonly LOG_PREFIX="[version-bump]"
+
+#######################################
+# Prints a message to STDERR.
+# Arguments:
+#   Message parts, joined with spaces.
+#######################################
+err() {
+  echo "${LOG_PREFIX} $*" >&2
+}
+
+#######################################
+# Fetches the base branch, so the comparison uses the remote state.
+# Keeps the local copy when the fetch fails (offline, no access).
+# Arguments:
+#   Base ref, e.g. origin/develop.
+#######################################
+fetch_base() {
+  local base="$1"
+  local -a cmd=(git fetch --quiet "${base%%/*}" "${base#*/}")
+
+  # `timeout` is not installed on macOS by default.
+  if command -v timeout >/dev/null 2>&1; then
+    cmd=(timeout "${FETCH_TIMEOUT_SECONDS}" "${cmd[@]}")
+  fi
+  if ! GIT_TERMINAL_PROMPT=0 "${cmd[@]}" 2>/dev/null; then
+    err "Could not fetch ${base}; comparing with the local copy."
+  fi
+}
+
+#######################################
+# Reads the "version" value of a plugin.json.
+# Inputs:
+#   plugin.json content on STDIN.
+# Outputs:
+#   The version, or nothing when there is none.
+#######################################
+read_version() {
+  sed -n 's/^[[:space:]]*"version"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
+    | head -n 1
+}
+
+#######################################
+# Compares two x.y.z versions.
+# Arguments:
+#   Version to test, version to compare with.
+# Returns:
+#   0 if the first version is higher, 1 otherwise.
+#######################################
+version_gt() {
+  local -a left right
+  IFS=. read -r -a left <<<"$1"
+  IFS=. read -r -a right <<<"$2"
+
+  local i x y
+  for i in 0 1 2; do
+    x="${left[i]:-0}"
+    y="${right[i]:-0}"
+    if (( 10#${x} != 10#${y} )); then
+      (( 10#${x} > 10#${y} ))
+      return
+    fi
+  done
+  return 1
+}
+
+#######################################
+# Raises the PATCH part of a version.
+# Arguments:
+#   Version, x.y.z.
+# Outputs:
+#   The raised version, e.g. 0.3.1 for 0.3.0.
+#######################################
+bump_patch() {
+  local major minor patch
+  IFS=. read -r major minor patch <<<"$1"
+  echo "${major}.${minor}.$(( 10#${patch%%[!0-9]*} + 1 ))"
+}
+
+#######################################
+# Writes a version into a plugin.json and stages the file.
+# Arguments:
+#   plugin.json path, new version.
+#######################################
+set_version() {
+  local manifest="$1"
+  local version="$2"
+
+  # `-i.bak` works with both GNU sed (Linux, Git Bash) and BSD sed (macOS).
+  sed -i.bak \
+    "s/\(\"version\"[[:space:]]*:[[:space:]]*\"\)[^\"]*\"/\1${version}\"/" \
+    "${manifest}"
+  rm -f "${manifest}.bak"
+  git add -- "${manifest}"
+}
+
+#######################################
+# Raises the version of one plugin, unless it is already higher than on the
+# base branch.
+# Arguments:
+#   Plugin folder (plugins/<group>/<plugin>), base ref.
+# Outputs:
+#   The old and new version, when raised.
+# Returns:
+#   1 if plugin.json has unstaged changes, 0 otherwise.
+#######################################
+bump_plugin() {
+  local dir="$1"
+  local base="$2"
+  local manifest="${dir}/.claude-plugin/plugin.json"
+
+  # Deleted in this commit, or new: not on the base branch yet.
+  git cat-file -e ":${manifest}" 2>/dev/null || return 0
+  git cat-file -e "${base}:${manifest}" 2>/dev/null || return 0
+
+  local staged base_version
+  staged="$(git show ":${manifest}" | read_version)"
+  base_version="$(git show "${base}:${manifest}" | read_version)"
+  if [[ -z "${staged}" || -z "${base_version}" ]]; then
+    err "No version in ${manifest}; skipping."
+    return 0
+  fi
+
+  # Already raised, by you or by an earlier commit on this branch.
+  if version_gt "${staged}" "${base_version}"; then
+    return 0
+  fi
+
+  local new
+  new="$(bump_patch "${base_version}")"
+
+  # Staging the whole file would also commit its unrelated unstaged edits.
+  if ! git diff --quiet -- "${manifest}"; then
+    err "${manifest} has unstaged changes." \
+      "Stage or stash them, or set the version to ${new} yourself."
+    return 1
+  fi
+
+  set_version "${manifest}" "${new}"
+  echo "${LOG_PREFIX} ${dir##*/}: ${staged} -> ${new}" \
+    "(${base}: ${base_version})"
+}
+
+main() {
+  if [[ -n "${SKIP_VERSION_BUMP:-}" ]]; then
+    return 0
+  fi
+
+  local base
+  base="$(git config --get sst.versionBase || echo "${DEFAULT_BASE}")"
+
+  fetch_base "${base}"
+  if ! git rev-parse --verify --quiet "${base}" >/dev/null; then
+    err "${base} not found; skipping."
+    return 0
+  fi
+
+  # Plugin folders (plugins/<group>/<plugin>) with staged changes. Read on fd 3
+  # so the commands in the loop cannot consume the list from STDIN.
+  local dir
+  while IFS= read -r dir <&3; do
+    bump_plugin "${dir}" "${base}"
+  done 3< <(git diff --cached --name-only -- 'plugins/*/*/*' \
+    | cut -d / -f 1-3 | sort -u)
+}
+
+main "$@"
