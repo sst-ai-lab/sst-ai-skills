@@ -1,7 +1,7 @@
 {
   "name": "cm-be-bff-common",
   "description": "Shared skills for the SCM BFF services (cm-be-bff-*): BFF feature scaffolding.",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "author": {
     "name": "SST Development Team"
   }
