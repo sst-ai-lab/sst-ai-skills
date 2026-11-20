@@ -14,9 +14,15 @@ description: >-
 | Thời gian làm bài | Đề xuất 「AI đặt cho từng câu」 |
 | Mức chi tiết của giải thích | 「Chỉ lý do đáp án đúng」 hoặc 「lý do đáp án đúng và lý do từng đáp án sai」. Đề xuất cái sau |
 
+## Phạm vi áp dụng
+
+- Áp dụng cho câu hỏi tạo độc lập vào ngân hàng câu hỏi, câu hỏi gắn curriculum và câu hỏi mới phục vụ skill check. Không yêu cầu có curriculum để tạo câu hỏi.
+- Khi tạo câu hỏi độc lập, xác định chủ đề/phạm vi kiến thức và tổng số câu từ yêu cầu hoặc tài liệu; không tự áp số câu theo từng chủ đề cấp 4 của curriculum.
+- Khi skill check cần câu hỏi mới, tạo câu hỏi vào ngân hàng câu hỏi trước rồi sử dụng cho skill check; không coi câu hỏi mới là nội dung chỉ tồn tại bên trong skill check.
+
 ## Cách viết câu hỏi tốt
 
-- Mỗi câu hỏi nói về chủ đề của nó: hai chủ đề không hỏi cùng một điểm. Viết mọi câu ở dạng hoàn chỉnh và cuối cùng, không viết nội dung tạm định sửa sau.
+- Mỗi câu hỏi bám sát chủ đề hoặc phạm vi kiến thức đã xác nhận: tránh hỏi trùng một điểm kiến thức giữa các câu. Viết mọi câu ở dạng hoàn chỉnh và cuối cùng, không viết nội dung tạm định sửa sau.
 - Trước hết quyết định câu hỏi bắt học viên làm gì (nhớ lại quy định hay con số, áp dụng quy định vào tình huống, kết hợp nhiều quy định để phán đoán). Độ khó theo điều đó. Câu hỏi về tính toán hay áp dụng vào tình huống thì từ mức trung bình trở lên.
 - Tiêu đề là một cụm từ ngắn chứ không phải câu, cho thấy điểm được hỏi. Lựa chọn cũng ngắn và cụ thể.
 - Hai lựa chọn sai nghe hợp lý nhưng sai rõ ràng khi đối chiếu với nguồn. Mỗi lựa chọn sai làm từ lỗi học viên thực sự có thể mắc (giá trị gần đúng, quy định của trường hợp khác, quy trình sai thứ tự), không làm lựa chọn vô nghĩa.
