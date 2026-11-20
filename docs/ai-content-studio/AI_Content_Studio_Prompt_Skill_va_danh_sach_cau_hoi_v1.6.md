@@ -11,6 +11,14 @@ AI Content Studio tổ chức hướng dẫn cho AI Agent thành **hai phần**:
 
 Ví dụ, để tạo Curriculum, AI sử dụng Skill thu thập thông tin để xác định những gì cần hỏi, rồi áp dụng Skill thiết kế Curriculum. Khi tạo câu hỏi hoặc Skill Check, AI áp dụng các Skill tương ứng. Kiến trúc này có thể mở rộng: nếu hệ thống triển khai **AI Quality Check** trong tương lai, có thể bổ sung Skill hướng dẫn kiểm tra chất lượng nội dung. Đây là ví dụ về khả năng mở rộng, **chưa phải Skill hiện có**.
 
+### Cơ chế hội thoại và áp dụng Skill
+
+AI Content Studio trước hết là **trợ lý AI có thể trò chuyện và giải đáp thắc mắc thông thường**. Người dùng có thể hỏi đáp, trao đổi ý tưởng hoặc nhờ giải thích mà không cần bắt đầu quy trình tạo nội dung.
+
+Khi người dùng **muốn tạo hoặc chỉnh sửa nội dung của hệ thống** — như Ngân hàng câu hỏi, Curriculum hoặc Skill Check — AI mới **áp dụng các Skill phù hợp** để hướng dẫn quy trình, thu thập những thông tin còn thiếu, đề xuất phương án và xác nhận trước khi tạo.
+
+Với hội thoại thông thường, AI **không tự động đặt các câu hỏi cấu hình** hay chuyển sang quy trình tạo nội dung. Việc áp dụng Skill phụ thuộc vào yêu cầu thực tế của người dùng; mô tả này không khẳng định cách thức kỹ thuật nạp Skill vào ngữ cảnh.
+
 ## 2. Danh sách Skill hiện tại
 
 | File Skill | Chức năng |
