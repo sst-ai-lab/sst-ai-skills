@@ -31,11 +31,11 @@ Với hội thoại thông thường, AI **không tự động đặt các câu 
 
 ## 3. Những nội dung AI hỏi người dùng trước khi tạo
 
-**Cách đọc bảng:** **Hỏi** = AI đưa câu hỏi để người dùng lựa chọn nếu chưa có thông tin; **Tóm tắt** = AI tự đề xuất theo yêu cầu/tài liệu và hiển thị để người dùng xác nhận, không hỏi riêng từng mục. AI không hỏi lại thông tin đã có hoặc thông tin người dùng giao AI quyết định. Chỉ áp dụng các mục liên quan đến nội dung được yêu cầu tạo.
+**Cách đọc bảng:** Cột **Cách AI xử lý** mô tả hành động của AI, không phải thao tác người dùng phải thực hiện. **Hỏi** = AI hỏi người dùng khi thiếu thông tin, kèm lựa chọn hoặc đề xuất phù hợp; **Tóm tắt** = AI tự đề xuất dựa trên yêu cầu/tài liệu và đưa vào bản tóm tắt để người dùng xác nhận, không hỏi riêng từng mục. AI không hỏi lại thông tin đã có hoặc thông tin người dùng giao AI quyết định. Chỉ áp dụng các mục liên quan đến nội dung được yêu cầu tạo.
 
 ### 3.1. Xác định phạm vi ban đầu
 
-| STT | Nội dung | AI hỏi gì / xử lý thế nào? | Cách thực hiện |
+| STT | Nội dung | AI hỏi gì / xử lý thế nào? | Cách AI xử lý |
 |---|---|---|---|
 | 1 | Phạm vi tạo | Bạn muốn AI hỗ trợ tạo **Ngân hàng câu hỏi**, **Curriculum**, **Skill Check** hay **trọn gói** (Curriculum, câu hỏi và Skill Check)? | **Hỏi**; các thành phần có thể được tạo riêng. Đề xuất trọn gói nếu người dùng chưa chỉ định phạm vi. |
 | 2 | Cách tiếp tục | Muốn AI **hỏi lần lượt từng mục**, hay **tự viết yêu cầu/gửi tài liệu trước**? | **Hỏi**; đề xuất hỏi lần lượt. |
@@ -45,7 +45,7 @@ Với hội thoại thông thường, AI **không tự động đặt các câu 
 
 ### 3.2. Khi tạo Curriculum
 
-| STT | Nội dung | AI hỏi gì / xử lý thế nào? | Cách thực hiện |
+| STT | Nội dung | AI hỏi gì / xử lý thế nào? | Cách AI xử lý |
 |---|---|---|---|
 | 1 | Đối tượng học viên | Chương trình dành cho ai? | **Hỏi**; đề xuất đối tượng phù hợp với tài liệu, kèm 2–3 lựa chọn. |
 | 2 | Mục tiêu học tập | Sau khi học xong, học viên cần biết hoặc làm được gì? | **Hỏi**; đưa 2–3 mục tiêu phù hợp với tài liệu và đối tượng. |
@@ -56,7 +56,7 @@ Với hội thoại thông thường, AI **không tự động đặt các câu 
 
 ### 3.3. Khi tạo câu hỏi
 
-| STT | Nội dung | AI hỏi gì / xử lý thế nào? | Cách thực hiện |
+| STT | Nội dung | AI hỏi gì / xử lý thế nào? | Cách AI xử lý |
 |---|---|---|---|
 | 1 | Số câu hỏi | Mỗi chủ đề cần **1, 2 hay 3 câu hỏi**? | **Hỏi**; đề xuất **2 câu/chủ đề**. |
 | 2 | Tỉ lệ độ khó | Muốn phân bổ câu **dễ, trung bình, khó** như thế nào? | **Hỏi**; đưa 2–3 phương án tỉ lệ phù hợp với đối tượng và tài liệu. |
@@ -67,7 +67,7 @@ Với hội thoại thông thường, AI **không tự động đặt các câu 
 
 ### 3.4. Khi tạo Skill Check
 
-| STT | Nội dung | AI hỏi gì / xử lý thế nào? | Cách thực hiện |
+| STT | Nội dung | AI hỏi gì / xử lý thế nào? | Cách AI xử lý |
 |---|---|---|---|
 | 1 | Mục đích đánh giá | Đánh giá **trước khi học** hay **xác nhận sau khi học**? | **Hỏi**; đề xuất **sau khi học**. |
 | 2 | Số câu đánh giá | Skill Check cần bao nhiêu câu? | **Hỏi**; đưa 3 phương án theo số chương, đề xuất **2 câu/chương**. |
