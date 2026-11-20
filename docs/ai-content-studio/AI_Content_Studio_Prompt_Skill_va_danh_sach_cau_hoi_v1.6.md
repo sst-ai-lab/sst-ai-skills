@@ -41,7 +41,7 @@ Với hội thoại thông thường, AI **không tự động đặt các câu 
 | 2 | Cách tiếp tục | Muốn AI **hỏi lần lượt từng mục**, hay **tự viết yêu cầu/gửi tài liệu trước**? | **Hỏi**; đề xuất hỏi lần lượt. |
 | 3 | Nguồn nội dung | Có tài liệu đào tạo hoặc chủ đề để AI dựa vào chưa? | **Hỏi trong chat** nếu chưa có cả tài liệu lẫn chủ đề. |
 
-**Lưu ý:** Skill Check là một phạm vi tạo độc lập, không bắt buộc đi kèm Curriculum. Bảng này là **đề xuất điều chỉnh nghiệp vụ** so với lựa chọn phạm vi trong Skill gốc `02_Các mục thu thập.md`; các file Skill tiếng Việt gốc được giữ nguyên để đối chiếu.
+**Lưu ý:** Skill Check là một phạm vi tạo độc lập, không bắt buộc đi kèm Curriculum. Phạm vi này đã được đồng bộ vào bản Prompt/Skill tiếng Việt đã refactor trên cùng branch; file ZIP gốc vẫn là tài liệu tham chiếu ban đầu.
 
 ### 3.2. Khi tạo Curriculum
 
@@ -58,7 +58,7 @@ Với hội thoại thông thường, AI **không tự động đặt các câu 
 
 | STT | Nội dung | AI hỏi gì / xử lý thế nào? | Cách AI xử lý |
 |---|---|---|---|
-| 1 | Số câu hỏi | Mỗi chủ đề cần **1, 2 hay 3 câu hỏi**? | **Hỏi**; đề xuất **2 câu/chủ đề**. |
+| 1 | Số câu hỏi | Nếu gắn Curriculum: mỗi chủ đề cần **1, 2 hay 3 câu**? Nếu tạo ngân hàng độc lập: cần tổng bao nhiêu câu hoặc bao nhiêu câu theo nhóm chủ đề? | **Hỏi**; đề xuất theo phạm vi, mặc định **2 câu/chủ đề** khi gắn Curriculum. |
 | 2 | Tỉ lệ độ khó | Muốn phân bổ câu **dễ, trung bình, khó** như thế nào? | **Hỏi**; đưa 2–3 phương án tỉ lệ phù hợp với đối tượng và tài liệu. |
 | 3 | Số câu theo độ khó | Với tổng số câu đã chọn, mỗi mức độ khó có bao nhiêu câu? | **Tóm tắt**; AI tính để tổng khớp số câu đã chọn. |
 | 4 | Thời gian làm bài | Mỗi câu cần bao nhiêu thời gian? | **Tóm tắt**; AI đề xuất theo độ dài và độ khó từng câu. |
@@ -70,9 +70,9 @@ Với hội thoại thông thường, AI **không tự động đặt các câu 
 | STT | Nội dung | AI hỏi gì / xử lý thế nào? | Cách AI xử lý |
 |---|---|---|---|
 | 1 | Mục đích đánh giá | Đánh giá **trước khi học** hay **xác nhận sau khi học**? | **Hỏi**; đề xuất **sau khi học**. |
-| 2 | Số câu đánh giá | Skill Check cần bao nhiêu câu? | **Hỏi**; đưa 3 phương án theo số chương, đề xuất **2 câu/chương**. |
+| 2 | Số câu đánh giá | Skill Check cần bao nhiêu câu? | **Hỏi**; đề xuất theo phạm vi đánh giá, chỉ dựa vào số chương khi gắn Curriculum. |
 | 3 | Số câu theo độ khó | Có bao nhiêu câu dễ, trung bình và khó? | **Tóm tắt**; AI phân bổ theo mục đích đánh giá. |
-| 4 | Nguồn câu hỏi | Sử dụng câu hỏi đã có trong Curriculum hay cần câu mới? | **Tóm tắt**; ưu tiên câu hỏi Curriculum nếu có. Trường hợp mục đích/nguồn chưa rõ, AI có thể hỏi thêm theo Skill thiết kế Skill Check. |
+| 4 | Nguồn câu hỏi | Dùng câu hỏi thuộc Curriculum, chọn từ ngân hàng câu hỏi hay tạo câu hỏi mới? | **Hỏi nếu chưa rõ**; nếu đã biết, AI đưa nguồn đã chọn vào tóm tắt. |
 | 5 | Lựa chọn “Chưa có kinh nghiệm” (`未経験`) | Có hiển thị lựa chọn này không? | **Tóm tắt**; hiện ở đánh giá trước học, ẩn ở đánh giá sau học. |
 | 6 | Nhóm phân tích | Kết quả đánh giá thuộc nhóm phân tích nào? | **Tóm tắt**; dùng nhóm phù hợp đã có hoặc đề xuất tạo nhóm mới. |
 | 7 | Đối tượng và thời điểm làm bài | Ai được làm bài, khi nào được bắt đầu? | **Tóm tắt**; mặc định người học nội bộ, có thể làm ngay sau khi lưu. |
@@ -84,7 +84,7 @@ Với hội thoại thông thường, AI **không tự động đặt các câu 
 | Nhóm | Quy tắc chính |
 |---|---|
 | Hội thoại | Xác định yêu cầu → làm rõ phạm vi → hỏi mục còn thiếu → **hiển thị tóm tắt để xác nhận** → tạo và báo cáo. Không bỏ qua bước xác nhận trước khi tạo. |
-| Curriculum | Cấu trúc **4 cấp**, tới cấp chủ đề; nếu tạo câu hỏi thì **ít nhất 1 câu/chủ đề**. Phân bổ số câu theo lượng nội dung, thời lượng theo độ dài chủ đề. |
+| Curriculum | Cấu trúc **4 cấp**, tới cấp chủ đề; nếu tạo câu hỏi gắn Curriculum thì **ít nhất 1 câu/chủ đề**. Phân bổ số câu theo lượng nội dung, thời lượng theo độ dài chủ đề. |
 | Chất lượng câu hỏi | Độ khó phản ánh yêu cầu ghi nhớ, áp dụng hoặc kết hợp; đáp án sai phải hợp lý; giải thích dựa trên nguồn; thời gian phù hợp độ dài và độ khó. |
 | Skill Check | Sau học có câu dễ, trung bình, khó và **ít nhất 1 câu khó**; trước học ưu tiên dễ và trung bình. Phủ đều các chương, sắp xếp câu từ dễ đến khó. |
 | Thay đổi | Sửa nhỏ có thể thực hiện ngay; sửa lớn phải xác nhận ảnh hưởng. Nếu thay đổi ở bước tóm tắt, AI cập nhật tóm tắt để xác nhận lại. |
@@ -94,5 +94,7 @@ Với hội thoại thông thường, AI **không tự động đặt các câu 
 AI Content Studio đã bổ sung **giao diện xem và cập nhật Assistant/Skill**. Người quản trị có thể xem nội dung đang cấu hình và điều chỉnh các hướng dẫn AI trực tiếp trên UI, thuận tiện cho quá trình **phát triển, kiểm thử và bảo trì**, không cần chỉnh sửa file thủ công mỗi lần tinh chỉnh Prompt. Khi có chức năng mới, có thể bổ sung Skill tương ứng trong phạm vi khả năng hệ thống hỗ trợ.
 
 ---
+
+**Trạng thái tài liệu:** Bản Prompt/Skill tiếng Việt trong `docs/ai-content-studio/prompts/vi/` đã được refactor để thống nhất với phạm vi nghiệp vụ trong tài liệu này. Các bản trong ZIP nguồn ban đầu không bị thay đổi.
 
 **Lưu ý khi đối chiếu:** Danh sách trên mô tả các **đầu mục AI cần thu thập hoặc xác nhận**, không phải kịch bản câu chữ cố định. AI chỉ hỏi những mục còn thiếu và phù hợp với phạm vi người dùng yêu cầu; các mục ghi **Tóm tắt** vẫn được người dùng xem và sửa trước khi tạo.
