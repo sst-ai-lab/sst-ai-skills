@@ -29,9 +29,11 @@ Ví dụ, để tạo Curriculum, AI sử dụng Skill thu thập thông tin đ�
 
 | STT | Nội dung | AI hỏi gì / xử lý thế nào? | Cách thực hiện |
 |---|---|---|---|
-| 1 | Phạm vi tạo | Chỉ tạo **Curriculum**, tạo **Curriculum + câu hỏi**, hay tạo **trọn gói** (Curriculum + câu hỏi + Skill Check)? | **Hỏi**; đề xuất trọn gói, trừ khi người dùng đã chỉ định phạm vi. |
+| 1 | Phạm vi tạo | Bạn muốn AI hỗ trợ tạo **Ngân hàng câu hỏi**, **Curriculum**, **Skill Check** hay **trọn gói** (Curriculum, câu hỏi và Skill Check)? | **Hỏi**; các thành phần có thể được tạo riêng. Đề xuất trọn gói nếu người dùng chưa chỉ định phạm vi. |
 | 2 | Cách tiếp tục | Muốn AI **hỏi lần lượt từng mục**, hay **tự viết yêu cầu/gửi tài liệu trước**? | **Hỏi**; đề xuất hỏi lần lượt. |
 | 3 | Nguồn nội dung | Có tài liệu đào tạo hoặc chủ đề để AI dựa vào chưa? | **Hỏi trong chat** nếu chưa có cả tài liệu lẫn chủ đề. |
+
+**Lưu ý:** Skill Check là một phạm vi tạo độc lập, không bắt buộc đi kèm Curriculum. Bảng này là **đề xuất điều chỉnh nghiệp vụ** so với lựa chọn phạm vi trong Skill gốc `02_Các mục thu thập.md`; các file Skill tiếng Việt gốc được giữ nguyên để đối chiếu.
 
 ### 3.2. Khi tạo Curriculum
 
